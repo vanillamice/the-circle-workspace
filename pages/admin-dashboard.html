@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - The Circle</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .header {
+            background: #333;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+        }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section h2 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .btn-success {
+            background: #28a745;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        .status-pending {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        
+        .status-confirmed {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .status-cancelled {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .message {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .stat-label {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>The Circle - Admin Dashboard</h1>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+    
+    <div class="container">
+        <div id="message"></div>
+        
+        <!-- Stats Section -->
+        <div class="stats">
+                    <div class="stat-card">
+                <div class="stat-number" id="totalBookings">0</div>
+                <div class="stat-label">Total Bookings</div>
+                        </div>
+            <div class="stat-card">
+                <div class="stat-number" id="pendingBookings">0</div>
+                <div class="stat-label">Pending</div>
+                        </div>
+            <div class="stat-card">
+                <div class="stat-number" id="confirmedBookings">0</div>
+                <div class="stat-label">Confirmed</div>
+                    </div>
+                    <div class="stat-card">
+                <div class="stat-number" id="totalRevenue">0 L.E</div>
+                <div class="stat-label">Revenue</div>
+                        </div>
+                    </div>
+                    
+        <!-- Add Booking Section -->
+        <div class="section">
+            <h2>Add New Booking</h2>
+            <form id="addBookingForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="customerName">Customer Name</label>
+                        <input type="text" id="customerName" required>
+                        </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                        </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" id="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingType">Booking Type</label>
+                        <select id="bookingType" required>
+                            <option value="shared_daily">Daily Pass</option>
+                            <option value="shared_monthly">Monthly Membership</option>
+                            <option value="private_hourly">Private Room</option>
+                        </select>
+                        </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required>
+                        </div>
+                    <div class="form-group">
+                        <label for="amount">Amount (L.E)</label>
+                        <input type="number" id="amount" required>
+                    </div>
+                </div>
+
+                <!-- Time and Duration fields (only for private room) -->
+                <div id="timeFields" style="display: none;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <div class="form-group">
+                            <label for="startTime">Start Time (24-hour format)</label>
+                            <select id="startTime" required>
+                                <option value="">Select start time</option>
+                                <option value="09:00">09:00</option>
+                                <option value="10:00">10:00</option>
+                                <option value="11:00">11:00</option>
+                                <option value="12:00">12:00</option>
+                                <option value="13:00">13:00</option>
+                                <option value="14:00">14:00</option>
+                                <option value="15:00">15:00</option>
+                                <option value="16:00">16:00</option>
+                                <option value="17:00">17:00</option>
+                                <option value="18:00">18:00</option>
+                                <option value="19:00">19:00</option>
+                                <option value="20:00">20:00</option>
+                                <option value="21:00">21:00</option>
+                                <option value="22:00">22:00</option>
+                                <option value="23:00">23:00</option>
+                                <option value="00:00">00:00</option>
+                                <option value="01:00">01:00</option>
+                            </select>
+                    </div>
+                        <div class="form-group">
+                            <label for="duration">Duration (hours)</label>
+                            <select id="duration" required>
+                                <option value="">Select duration</option>
+                                <option value="1">1 hour</option>
+                                <option value="2">2 hours</option>
+                                <option value="3">3 hours</option>
+                                <option value="4">4 hours</option>
+                                <option value="5">5 hours</option>
+                                <option value="6">6 hours</option>
+                                <option value="7">7 hours</option>
+                                <option value="8">8 hours</option>
+                                <option value="9">9 hours</option>
+                                <option value="10">10 hours</option>
+                            </select>
+                    </div>
+                </div>
+                    <div class="form-group" style="margin-top: 1rem;">
+                        <label for="endTime">End Time (24-hour format, calculated automatically)</label>
+                        <input type="text" id="endTime" readonly style="background-color: #f8f9fa;">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <input type="text" id="notes">
+                </div>
+                <button type="submit">Add Booking</button>
+            </form>
+                        </div>
+                        
+        <!-- Bookings List Section -->
+        <div class="section">
+            <h2>All Bookings</h2>
+            <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <select id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                    <select id="dayFilter">
+                        <option value="">All Days</option>
+                        <option value="01">1</option>
+                        <option value="02">2</option>
+                        <option value="03">3</option>
+                        <option value="04">4</option>
+                        <option value="05">5</option>
+                        <option value="06">6</option>
+                        <option value="07">7</option>
+                        <option value="08">8</option>
+                        <option value="09">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                            </select>
+                    <select id="monthFilter">
+                                <option value="">All Months</option>
+                                <option value="01">January</option>
+                                <option value="02">February</option>
+                                <option value="03">March</option>
+                                <option value="04">April</option>
+                                <option value="05">May</option>
+                                <option value="06">June</option>
+                                <option value="07">July</option>
+                                <option value="08">August</option>
+                                <option value="09">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                    <select id="yearFilter">
+                        <option value="">All Years</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                    </select>
+                    <button onclick="loadBookings()" style="background-color: #007bff;">Apply Filters</button>
+                    <button onclick="clearBookingFilters()" style="background-color: #6c757d;">Clear</button>
+                        </div>
+                <button onclick="loadBookings()">Refresh</button>
+                    </div>
+            <!-- Search Bar for Bookings -->
+            <div style="margin-bottom: 1rem;">
+                <input type="text" id="bookingSearch" placeholder="Search by name, email, or phone..." style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;" onkeyup="searchBookings()">
+                    </div>
+            <table id="bookingsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer</th>
+                        <th>Email</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                        <th>Duration</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                <tbody id="bookingsTableBody">
+                    <tr>
+                        <td colspan="10" style="text-align: center;">Loading...</td>
+                    </tr>
+                        </tbody>
+                    </table>
+            <!-- Pagination for Bookings -->
+            <div id="bookingsPagination" style="margin-top: 1rem; display: flex; justify-content: center; gap: 0.5rem; align-items: center;">
+                <button onclick="changeBookingsPage(-1)" id="prevBookingsBtn" disabled>Previous</button>
+                <span id="bookingsPageInfo">Page 1 of 1</span>
+                <button onclick="changeBookingsPage(1)" id="nextBookingsBtn" disabled>Next</button>
+                </div>
+                </div>
+        
+        <!-- Orders Section -->
+        <div class="section">
+            <h2>Orders Management</h2>
+            
+            <!-- Search Orders by Booking ID -->
+            <div style="margin-bottom: 2rem;">
+                <h3>Search Orders by Booking ID</h3>
+                <div style="display: flex; gap: 1rem; align-items: end;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="searchBookingId">Booking ID</label>
+                        <input type="number" id="searchBookingId" placeholder="Enter booking ID">
+                        </div>
+                    <button onclick="searchOrders()">Search Orders</button>
+                    <button onclick="loadAllOrders()" style="background-color: #28a745;">Show All Orders</button>
+                </div>
+                        </div>
+                        
+            <!-- Add New Order -->
+            <div style="margin-bottom: 2rem;">
+                <h3>Add New Order</h3>
+                <form id="addOrderForm">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="orderBookingId">Booking ID</label>
+                            <input type="number" id="orderBookingId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="orderType">Order Type</label>
+                            <select id="orderType" required>
+                                <option value="">Select type</option>
+                                <option value="beverage">Beverage</option>
+                                <option value="water">Water</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="orderQuantity">Quantity</label>
+                            <input type="number" id="orderQuantity" value="1" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="orderPrice">Price (L.E)</label>
+                            <input type="number" id="orderPrice" value="10" readonly style="background-color: #f8f9fa;">
+                        </div>
+                        </div>
+                        <div class="form-group">
+                        <label for="orderNotes">Notes</label>
+                        <input type="text" id="orderNotes" placeholder="Optional notes">
+                        </div>
+                    <button type="submit">Add Order</button>
+                </form>
+                </div>
+                
+            <!-- Orders List -->
+            <div>
+                <h3>Orders List</h3>
+                <div style="margin-bottom: 1rem; display: flex; gap: 1rem; align-items: center;">
+                    <select id="orderDayFilter">
+                        <option value="">All Days</option>
+                        <option value="01">1</option>
+                        <option value="02">2</option>
+                        <option value="03">3</option>
+                        <option value="04">4</option>
+                        <option value="05">5</option>
+                        <option value="06">6</option>
+                        <option value="07">7</option>
+                        <option value="08">8</option>
+                        <option value="09">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                            </select>
+                    <select id="orderMonthFilter">
+                        <option value="">All Months</option>
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                            </select>
+                    <select id="orderYearFilter">
+                        <option value="">All Years</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                    </select>
+                    <button onclick="loadAllOrders()" style="background-color: #007bff;">Apply Filters</button>
+                    <button onclick="clearOrderFilters()" style="background-color: #6c757d;">Clear</button>
+                        </div>
+                <table id="ordersTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                            <th>Booking ID</th>
+                                    <th>Customer</th>
+                                    <th>Type</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                    <th>Notes</th>
+                            <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                    <tbody id="ordersTableBody">
+                        <tr>
+                            <td colspan="10" style="text-align: center;">No orders to display</td>
+                        </tr>
+                            </tbody>
+                        </table>
+                <!-- Pagination for Orders -->
+                <div id="ordersPagination" style="margin-top: 1rem; display: flex; justify-content: center; gap: 0.5rem; align-items: center;">
+                    <button onclick="changeOrdersPage(-1)" id="prevOrdersBtn" disabled>Previous</button>
+                    <span id="ordersPageInfo">Page 1 of 1</span>
+                    <button onclick="changeOrdersPage(1)" id="nextOrdersBtn" disabled>Next</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Valid Memberships Section -->
+        <div class="section">
+            <h2>Valid Memberships</h2>
+            <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <p style="color: #666; margin: 0;">Showing monthly memberships confirmed within the last 30 days</p>
+                    </div>
+                <button onclick="loadValidMemberships()">Refresh</button>
+                        </div>
+            <!-- Search Bar for Memberships -->
+            <div style="margin-bottom: 1rem; display: flex; gap: 0.5rem;">
+                <input type="text" id="membershipSearch" placeholder="Search by name, email, or phone..." style="flex: 1; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;" onkeyup="searchMemberships()">
+                <button onclick="clearMembershipSearch()" style="background-color: #6c757d;">Clear</button>
+                        </div>
+            <table id="membershipsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Date</th>
+                                    <th>Amount</th>
+                        <th>Status</th>
+                                    <th>Notes</th>
+                        <th>Days Remaining</th>
+                                </tr>
+                            </thead>
+                <tbody id="membershipsTableBody">
+                    <tr>
+                        <td colspan="9" style="text-align: center;">Loading...</td>
+                    </tr>
+                            </tbody>
+                        </table>
+            <!-- Pagination for Memberships -->
+            <div id="membershipsPagination" style="margin-top: 1rem; display: flex; justify-content: center; gap: 0.5rem; align-items: center;">
+                <button onclick="changeMembershipsPage(-1)" id="prevMembershipsBtn" disabled>Previous</button>
+                <span id="membershipsPageInfo">Page 1 of 1</span>
+                <button onclick="changeMembershipsPage(1)" id="nextMembershipsBtn" disabled>Next</button>
+                        </div>
+                    </div>
+    </div>
+
+    <script>
+        // Pagination variables
+        let allBookings = [];
+        let allOrders = [];
+        let allMemberships = [];
+        let currentBookingsPage = 1;
+        let currentOrdersPage = 1;
+        let currentMembershipsPage = 1;
+        const itemsPerPage = 10;
+        
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            loadStats();
+            loadBookings();
+            loadAllOrders(); // Load all orders by default
+            loadValidMemberships(); // Load valid memberships
+        });
+        
+        // Load dashboard statistics
+        async function loadStats() {
+            try {
+                console.log('Loading stats...');
+                const token = localStorage.getItem('adminToken');
+                console.log('Token:', token ? 'Present' : 'Missing');
+                
+                const response = await fetch('/api/admin/stats', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                console.log('Stats response status:', response.status);
+                
+                if (response.status === 401) {
+                    console.log('Unauthorized - logging out');
+                    logout();
+                    return;
+                }
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Stats response error:', errorText);
+                    showMessage(`Error loading stats: ${response.status}`, 'error');
+                    return;
+                }
+                
+                const data = await response.json();
+                console.log('Stats data:', data);
+                
+                document.getElementById('totalBookings').textContent = data.bookings.total || 0;
+                document.getElementById('pendingBookings').textContent = data.bookings.pending || 0;
+                document.getElementById('confirmedBookings').textContent = data.bookings.confirmed || 0;
+                document.getElementById('totalRevenue').textContent = `${data.bookings.revenue || 0} L.E`;
+            } catch (error) {
+                console.error('Stats error:', error);
+                showMessage('Error loading stats: ' + error.message, 'error');
+            }
+        }
+        
+        // Load bookings
+        async function loadBookings() {
+            try {
+                const statusFilter = document.getElementById('statusFilter').value;
+                const dayFilter = document.getElementById('dayFilter').value;
+                const monthFilter = document.getElementById('monthFilter').value;
+                const yearFilter = document.getElementById('yearFilter').value;
+                
+                let url = '/api/admin/bookings';
+                let params = [];
+                
+                if (statusFilter) {
+                    params.push(`status=${statusFilter}`);
+                }
+                if (dayFilter) {
+                    params.push(`day=${dayFilter}`);
+                }
+                if (monthFilter) {
+                    params.push(`month=${monthFilter}`);
+                }
+                if (yearFilter) {
+                    params.push(`year=${yearFilter}`);
+                }
+                
+                if (params.length > 0) {
+                    url += '?' + params.join('&');
+                }
+                
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                const data = await response.json();
+                allBookings = data;
+                currentBookingsPage = 1;
+                renderBookings();
+            } catch (error) {
+                showMessage('Error loading bookings', 'error');
+            }
+        }
+        
+        // Render bookings table
+        function renderBookings() {
+            const tbody = document.getElementById('bookingsTableBody');
+            const startIndex = (currentBookingsPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentBookings = allBookings.slice(startIndex, endIndex);
+            
+            if (allBookings.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align: center;">No bookings found</td></tr>';
+                updateBookingsPagination();
+                return;
+            }
+            
+            tbody.innerHTML = currentBookings.map(booking => `
+                <tr>
+                    <td>${booking.id}</td>
+                    <td>${booking.customer_name}</td>
+                    <td>${booking.email}</td>
+                    <td>${getBookingTypeName(booking.booking_type)}</td>
+                    <td>${booking.date}</td>
+                    <td>${booking.time || '-'}</td>
+                    <td>${booking.duration ? booking.duration + ' hours' : '-'}</td>
+                    <td>${booking.amount} L.E</td>
+                    <td><span class="status-${booking.status}">${booking.status}</span></td>
+                    <td>
+                        <button onclick="updateStatus(${booking.id}, 'confirmed')" class="btn-success" style="margin-right: 0.5rem;">Confirm</button>
+                        <button onclick="updateStatus(${booking.id}, 'cancelled')" class="btn-danger">Cancel</button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            updateBookingsPagination();
+        }
+        
+        // Get booking type name
+        function getBookingTypeName(type) {
+            const types = {
+                'shared_daily': 'Daily Pass',
+                'shared_monthly': 'Monthly Membership',
+                'private_hourly': 'Private Room'
+            };
+            return types[type] || type;
+        }
+        
+        // Pagination functions for bookings
+        function changeBookingsPage(direction) {
+            const totalPages = Math.ceil(allBookings.length / itemsPerPage);
+            const newPage = currentBookingsPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentBookingsPage = newPage;
+                renderBookings();
+            }
+        }
+        
+        function updateBookingsPagination() {
+            const totalPages = Math.ceil(allBookings.length / itemsPerPage);
+            const pageInfo = document.getElementById('bookingsPageInfo');
+            const prevBtn = document.getElementById('prevBookingsBtn');
+            const nextBtn = document.getElementById('nextBookingsBtn');
+            
+            pageInfo.textContent = `Page ${currentBookingsPage} of ${totalPages}`;
+            prevBtn.disabled = currentBookingsPage <= 1;
+            nextBtn.disabled = currentBookingsPage >= totalPages;
+        }
+        
+        // Pagination functions for orders
+        function changeOrdersPage(direction) {
+            const totalPages = Math.ceil(allOrders.length / itemsPerPage);
+            const newPage = currentOrdersPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentOrdersPage = newPage;
+                renderOrders();
+            }
+        }
+        
+        function updateOrdersPagination() {
+            const totalPages = Math.ceil(allOrders.length / itemsPerPage);
+            const pageInfo = document.getElementById('ordersPageInfo');
+            const prevBtn = document.getElementById('prevOrdersBtn');
+            const nextBtn = document.getElementById('nextOrdersBtn');
+            
+            pageInfo.textContent = `Page ${currentOrdersPage} of ${totalPages}`;
+            prevBtn.disabled = currentOrdersPage <= 1;
+            nextBtn.disabled = currentOrdersPage >= totalPages;
+        }
+        
+        // Update booking status
+        async function updateStatus(bookingId, status) {
+            const action = status === 'confirmed' ? 'confirm' : 'cancel';
+            const confirmed = confirm(`Are you sure you want to ${action} this booking?`);
+            
+            if (!confirmed) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/admin/bookings/${bookingId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    },
+                    body: JSON.stringify({ status })
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                if (response.ok) {
+                    showMessage(`Booking ${bookingId} status updated to ${status}`, 'success');
+                    loadBookings();
+                    loadStats();
+                } else {
+                    showMessage('Error updating status', 'error');
+                }
+            } catch (error) {
+                showMessage('Error updating status', 'error');
+            }
+        }
+        
+        // Set default date to today
+        document.getElementById('date').value = new Date().toISOString().split('T')[0];
+        
+        // Set default amount based on booking type
+        document.getElementById('bookingType').addEventListener('change', function() {
+            const amounts = {
+                'shared_daily': 100,
+                'shared_monthly': 2300,
+                'private_hourly': 150
+            };
+            document.getElementById('amount').value = amounts[this.value] || '';
+            
+            // Show/hide time fields for private room
+            const timeFields = document.getElementById('timeFields');
+            if (this.value === 'private_hourly') {
+                timeFields.style.display = 'block';
+                document.getElementById('startTime').required = true;
+                document.getElementById('duration').required = true;
+            } else {
+                timeFields.style.display = 'none';
+                document.getElementById('startTime').required = false;
+                document.getElementById('duration').required = false;
+                document.getElementById('startTime').value = '';
+                document.getElementById('duration').value = '';
+                document.getElementById('endTime').value = '';
+            }
+        });
+        
+        // Trigger the change event to set initial price
+        document.getElementById('bookingType').dispatchEvent(new Event('change'));
+        
+        // Calculate end time when start time or duration changes
+        document.getElementById('startTime').addEventListener('change', calculateEndTime);
+        document.getElementById('duration').addEventListener('change', calculateEndTime);
+        
+        function calculateEndTime() {
+            const startTime = document.getElementById('startTime').value;
+            const duration = document.getElementById('duration').value;
+            const endTimeField = document.getElementById('endTime');
+            
+            if (startTime && duration) {
+                const startHour = parseInt(startTime.split(':')[0]);
+                const startMinute = parseInt(startTime.split(':')[1]);
+                const durationHours = parseInt(duration);
+                
+                let endHour = startHour + durationHours;
+                const endMinute = startMinute;
+                
+                // Handle 24-hour format
+                if (endHour >= 24) {
+                    endHour = endHour - 24;
+                }
+                
+                const endTime = `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
+                endTimeField.value = endTime;
+                
+                // Validate that end time is not between 2 AM and 9 AM (02:00 to 09:00) - block early morning hours
+                if (endHour >= 2 && endHour <= 9) {
+                    endTimeField.style.backgroundColor = '#f8d7da';
+                    endTimeField.style.color = '#721c24';
+                    endTimeField.style.border = '1px solid #f5c6cb';
+                } else {
+                    endTimeField.style.backgroundColor = '#d4edda';
+                    endTimeField.style.color = '#155724';
+                    endTimeField.style.border = '1px solid #c3e6cb';
+                }
+                
+                // Update amount for private room bookings
+                const bookingType = document.getElementById('bookingType').value;
+                if (bookingType === 'private_hourly') {
+                    const amount = durationHours * 150;
+                    document.getElementById('amount').value = amount;
+                }
+            } else {
+                endTimeField.value = '';
+                endTimeField.style.backgroundColor = '#f8f9fa';
+                endTimeField.style.color = '#333';
+                endTimeField.style.border = '1px solid #ddd';
+            }
+        }
+        
+        // Add booking form
+        document.getElementById('addBookingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const bookingType = document.getElementById('bookingType').value;
+            const startTime = document.getElementById('startTime').value;
+            const duration = document.getElementById('duration').value;
+            const endTime = document.getElementById('endTime').value;
+            
+            // Validate private room bookings
+            if (bookingType === 'private_hourly') {
+                if (!startTime || !duration) {
+                    showMessage('Start time and duration are required for private room bookings', 'error');
+                    return;
+                }
+                
+                // Check if end time is between 2 AM and 9 AM (02:00 to 09:00) - block these early morning hours
+                const endHour = parseInt(endTime.split(':')[0]);
+                if (endHour >= 2 && endHour <= 9) {
+                    showMessage('Booking cannot end between 02:00 and 09:00. Please adjust duration or choose an earlier start time.', 'error');
+                    return;
+                }
+            }
+            
+            const formData = {
+                customer_name: document.getElementById('customerName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                booking_type: bookingType,
+                date: document.getElementById('date').value,
+                time: bookingType === 'private_hourly' ? startTime : null,
+                duration: bookingType === 'private_hourly' ? parseInt(duration) : null,
+                amount: parseInt(document.getElementById('amount').value),
+                status: 'pending',
+                notes: document.getElementById('notes').value
+            };
+            
+            try {
+                const response = await fetch('/api/admin/bookings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                if (response.ok) {
+                    showMessage('Booking added successfully!', 'success');
+                    e.target.reset();
+                    document.getElementById('timeFields').style.display = 'none';
+                    document.getElementById('date').value = new Date().toISOString().split('T')[0];
+                    loadBookings();
+                    loadStats();
+                } else {
+                    const error = await response.json();
+                    showMessage(`Error: ${error.error}`, 'error');
+                }
+            } catch (error) {
+                showMessage('Error adding booking', 'error');
+            }
+        });
+        
+        // Show message
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = `<div class="message ${type}">${message}</div>`;
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Logout
+        function logout() {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            window.location.href = 'admin-login.html';
+        }
+        
+        // ===== ORDERS MANAGEMENT =====
+        
+        // Load all orders
+        async function loadAllOrders() {
+            console.log('Loading all orders...');
+            
+            try {
+                const dayFilter = document.getElementById('orderDayFilter').value;
+                const monthFilter = document.getElementById('orderMonthFilter').value;
+                const yearFilter = document.getElementById('orderYearFilter').value;
+                
+                let url = '/api/admin/orders';
+                let params = [];
+                
+                if (dayFilter) {
+                    params.push(`day=${dayFilter}`);
+                }
+                if (monthFilter) {
+                    params.push(`month=${monthFilter}`);
+                }
+                if (yearFilter) {
+                    params.push(`year=${yearFilter}`);
+                }
+                
+                if (params.length > 0) {
+                    url += '?' + params.join('&');
+                }
+                
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+                
+                console.log('All orders response status:', response.status);
+                
+                if (response.status === 401) {
+                    console.log('Unauthorized - logging out');
+                    logout();
+                    return;
+                }
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    console.error('All orders response error:', error);
+                    showMessage(`Error: ${error.error}`, 'error');
+                    return;
+                }
+                
+                const data = await response.json();
+                console.log('All orders data received:', data);
+                
+                allOrders = data;
+                currentOrdersPage = 1;
+                renderOrders();
+                
+                if (data.length === 0) {
+                    showMessage('No orders found', 'info');
+                } else {
+                    showMessage(`Loaded ${data.length} orders`, 'success');
+                }
+            } catch (error) {
+                console.error('All orders error:', error);
+                showMessage('Error loading all orders: ' + error.message, 'error');
+            }
+        }
+        
+        // Search orders by booking ID
+        async function searchOrders() {
+            const bookingId = document.getElementById('searchBookingId').value;
+            if (!bookingId) {
+                showMessage('Please enter a booking ID', 'error');
+                return;
+            }
+            
+            console.log('Searching orders for booking ID:', bookingId);
+            
+            try {
+                const response = await fetch(`/api/admin/orders?booking_id=${bookingId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+                
+                console.log('Orders response status:', response.status);
+                
+                if (response.status === 401) {
+                    console.log('Unauthorized - logging out');
+                    logout();
+                    return;
+                }
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    console.error('Orders response error:', error);
+                    showMessage(`Error: ${error.error}`, 'error');
+                    return;
+                }
+                
+                const data = await response.json();
+                console.log('Orders data received:', data);
+                
+                allOrders = data.orders;
+                currentOrdersPage = 1;
+                renderOrders();
+                
+                if (data.orders.length === 0) {
+                    showMessage(`No orders found for booking ID ${bookingId}`, 'info');
+                } else {
+                    showMessage(`Found ${data.orders.length} orders for booking ID ${bookingId}`, 'success');
+                }
+            } catch (error) {
+                console.error('Orders search error:', error);
+                showMessage('Error searching orders: ' + error.message, 'error');
+            }
+        }
+        
+        // Add new order
+        document.getElementById('addOrderForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                booking_id: parseInt(document.getElementById('orderBookingId').value),
+                order_type: document.getElementById('orderType').value,
+                quantity: parseInt(document.getElementById('orderQuantity').value),
+                price: 10, // Fixed price
+                notes: document.getElementById('orderNotes').value
+            };
+            
+            try {
+                const response = await fetch('/api/admin/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    showMessage(`Error: ${error.error}`, 'error');
+                    return;
+                }
+                
+                showMessage('Order added successfully!', 'success');
+                e.target.reset();
+                document.getElementById('orderPrice').value = '10';
+                
+                // Refresh orders list and stats
+                loadAllOrders();
+                loadStats();
+            } catch (error) {
+                showMessage('Error adding order', 'error');
+            }
+        });
+        
+        // Render orders table
+        function renderOrders() {
+            console.log('Rendering orders from allOrders:', allOrders);
+            
+            const tbody = document.getElementById('ordersTableBody');
+            const startIndex = (currentOrdersPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentOrders = allOrders.slice(startIndex, endIndex);
+            
+            if (!allOrders || allOrders.length === 0) {
+                console.log('No orders to display');
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align: center;">No orders found</td></tr>';
+                updateOrdersPagination();
+                return;
+            }
+            
+            console.log('Rendering', currentOrders.length, 'orders for page', currentOrdersPage);
+            
+            tbody.innerHTML = currentOrders.map(order => {
+                console.log('Processing order:', order);
+                return `
+                    <tr>
+                        <td>${order.id}</td>
+                        <td>${order.booking_id}</td>
+                        <td>${order.customer_name || '-'}</td>
+                        <td>${order.order_type}</td>
+                        <td>${order.quantity}</td>
+                        <td>${order.price} L.E</td>
+                        <td>${order.quantity * order.price} L.E</td>
+                        <td>${order.notes || '-'}</td>
+                        <td>${new Date(order.created_at).toLocaleString()}</td>
+                        <td>
+                            <button onclick="deleteOrder(${order.id})" class="btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            console.log('Orders table updated');
+            updateOrdersPagination();
+        }
+        
+        // Update total price when quantity changes
+        document.getElementById('orderQuantity').addEventListener('input', function() {
+            const quantity = parseInt(this.value) || 0;
+            const price = 10;
+            const total = quantity * price;
+            // You could add a total display field here if needed
+        });
+        
+        // Clear booking filters
+        function clearBookingFilters() {
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('dayFilter').value = '';
+            document.getElementById('monthFilter').value = '';
+            document.getElementById('yearFilter').value = '';
+            document.getElementById('bookingSearch').value = '';
+            loadBookings();
+        }
+        
+        // Clear membership search
+        function clearMembershipSearch() {
+            document.getElementById('membershipSearch').value = '';
+            loadValidMemberships();
+        }
+        
+        // Clear order filters
+        function clearOrderFilters() {
+            document.getElementById('orderDayFilter').value = '';
+            document.getElementById('orderMonthFilter').value = '';
+            document.getElementById('orderYearFilter').value = '';
+            loadAllOrders();
+        }
+        
+        // Delete order
+        async function deleteOrder(orderId) {
+            if (!confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/admin/orders/${orderId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    showMessage(`Error: ${error.error}`, 'error');
+                    return;
+                }
+                
+                showMessage('Order deleted successfully!', 'success');
+                
+                // Refresh orders list and stats
+                loadAllOrders();
+                loadStats();
+            } catch (error) {
+                console.error('Delete order error:', error);
+                showMessage('Error deleting order: ' + error.message, 'error');
+            }
+        }
+        
+        // Load valid memberships
+        async function loadValidMemberships() {
+            try {
+                const response = await fetch('/api/admin/memberships', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                const data = await response.json();
+                allMemberships = data;
+                currentMembershipsPage = 1;
+                renderMemberships();
+            } catch (error) {
+                console.error('Error loading memberships:', error);
+                showMessage('Error loading valid memberships', 'error');
+            }
+        }
+        
+        // Render memberships table
+        function renderMemberships() {
+            const tbody = document.getElementById('membershipsTableBody');
+            const startIndex = (currentMembershipsPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const currentMemberships = allMemberships.slice(startIndex, endIndex);
+            
+            if (!allMemberships || allMemberships.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No valid memberships found</td></tr>';
+                updateMembershipsPagination();
+                return;
+            }
+            
+            tbody.innerHTML = currentMemberships.map(membership => {
+                const daysRemaining = calculateDaysRemaining(membership.date);
+                const daysRemainingClass = daysRemaining <= 7 ? 'status-pending' : 'status-confirmed';
+                
+                return `
+                    <tr>
+                        <td>${membership.id}</td>
+                        <td>${membership.customer_name}</td>
+                        <td>${membership.email}</td>
+                        <td>${membership.phone || '-'}</td>
+                        <td>${membership.date}</td>
+                        <td>${membership.amount} L.E</td>
+                        <td><span class="status-${membership.status}">${membership.status}</span></td>
+                        <td>${membership.notes || '-'}</td>
+                        <td><span class="${daysRemainingClass}">${daysRemaining} days</span></td>
+                    </tr>
+                `;
+            }).join('');
+            
+            updateMembershipsPagination();
+        }
+        
+        // Calculate days remaining for membership
+        function calculateDaysRemaining(bookingDate) {
+            const booking = new Date(bookingDate);
+            const today = new Date();
+            const thirtyDaysFromBooking = new Date(booking);
+            thirtyDaysFromBooking.setDate(booking.getDate() + 30);
+            
+            const timeDiff = thirtyDaysFromBooking.getTime() - today.getTime();
+            const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            
+            return Math.max(0, daysRemaining);
+        }
+        
+        // Pagination functions for memberships
+        function changeMembershipsPage(direction) {
+            const totalPages = Math.ceil(allMemberships.length / itemsPerPage);
+            const newPage = currentMembershipsPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                currentMembershipsPage = newPage;
+                renderMemberships();
+            }
+        }
+        
+        function updateMembershipsPagination() {
+            const totalPages = Math.ceil(allMemberships.length / itemsPerPage);
+            const prevBtn = document.getElementById('prevMembershipsBtn');
+            const nextBtn = document.getElementById('nextMembershipsBtn');
+            const pageInfo = document.getElementById('membershipsPageInfo');
+            
+            prevBtn.disabled = currentMembershipsPage <= 1;
+            nextBtn.disabled = currentMembershipsPage >= totalPages;
+            pageInfo.textContent = `Page ${currentMembershipsPage} of ${totalPages}`;
+        }
+        
+        // Search functions with debouncing
+        let searchBookingsTimeout;
+        function searchBookings() {
+            clearTimeout(searchBookingsTimeout);
+            searchBookingsTimeout = setTimeout(() => {
+                performBookingsSearch();
+            }, 300); // 300ms delay
+        }
+        
+        let searchMembershipsTimeout;
+        function searchMemberships() {
+            clearTimeout(searchMembershipsTimeout);
+            searchMembershipsTimeout = setTimeout(() => {
+                performMembershipsSearch();
+            }, 300); // 300ms delay
+        }
+        
+        async function performBookingsSearch() {
+            const searchTerm = document.getElementById('bookingSearch').value;
+            try {
+                const statusFilter = document.getElementById('statusFilter').value;
+                const dayFilter = document.getElementById('dayFilter').value;
+                const monthFilter = document.getElementById('monthFilter').value;
+                const yearFilter = document.getElementById('yearFilter').value;
+                
+                let url = '/api/admin/bookings';
+                let params = [];
+                
+                if (statusFilter) {
+                    params.push(`status=${statusFilter}`);
+                }
+                if (dayFilter) {
+                    params.push(`day=${dayFilter}`);
+                }
+                if (monthFilter) {
+                    params.push(`month=${monthFilter}`);
+                }
+                if (yearFilter) {
+                    params.push(`year=${yearFilter}`);
+                }
+                if (searchTerm) {
+                    params.push(`search=${encodeURIComponent(searchTerm)}`);
+                }
+                
+                if (params.length > 0) {
+                    url += '?' + params.join('&');
+                }
+                
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                const data = await response.json();
+                allBookings = data;
+                currentBookingsPage = 1;
+                renderBookings();
+            } catch (error) {
+                showMessage('Error searching bookings', 'error');
+            }
+        }
+        
+        async function performMembershipsSearch() {
+            const searchTerm = document.getElementById('membershipSearch').value;
+            try {
+                let url = '/api/admin/memberships';
+                if (searchTerm) {
+                    url += `?search=${encodeURIComponent(searchTerm)}`;
+                }
+                
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                const data = await response.json();
+                allMemberships = data;
+                currentMembershipsPage = 1;
+                renderMemberships();
+            } catch (error) {
+                showMessage('Error searching memberships', 'error');
+            }
+        }
+        
+
+        
+        // Update pagination functions to accept filtered count
+        function updateBookingsPagination(filteredCount = null) {
+            const totalItems = filteredCount !== null ? filteredCount : allBookings.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const prevBtn = document.getElementById('prevBookingsBtn');
+            const nextBtn = document.getElementById('nextBookingsBtn');
+            const pageInfo = document.getElementById('bookingsPageInfo');
+            
+            prevBtn.disabled = currentBookingsPage <= 1;
+            nextBtn.disabled = currentBookingsPage >= totalPages;
+            pageInfo.textContent = `Page ${currentBookingsPage} of ${totalPages}`;
+        }
+        
+        function updateMembershipsPagination(filteredCount = null) {
+            const totalItems = filteredCount !== null ? filteredCount : allMemberships.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const prevBtn = document.getElementById('prevMembershipsBtn');
+            const nextBtn = document.getElementById('nextMembershipsBtn');
+            const pageInfo = document.getElementById('membershipsPageInfo');
+            
+            prevBtn.disabled = currentMembershipsPage <= 1;
+            nextBtn.disabled = currentMembershipsPage >= totalPages;
+            pageInfo.textContent = `Page ${currentMembershipsPage} of ${totalPages}`;
+        }
+    </script>
+</body>
+</html>
