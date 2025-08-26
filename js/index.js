@@ -45,6 +45,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     update();
+    
+    // Auto-switch for hero slider only
+    if (slider.classList.contains('slider-hero')) {
+      let autoSlideInterval = setInterval(() => {
+        go(index + 1);
+      }, 3000); // Switch every 3 seconds
+      
+      // Pause auto-slide on hover
+      slider.addEventListener('mouseenter', () => {
+        clearInterval(autoSlideInterval);
+      });
+      
+      slider.addEventListener('mouseleave', () => {
+        autoSlideInterval = setInterval(() => {
+          go(index + 1);
+        }, 3000);
+      });
+    }
   });
 
   // Intersection Observer for workspace text animation
@@ -305,4 +323,99 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 1000);
     }
   };
+
+  // Reviews Carousel Functionality
+  let currentReviewIndex = 0;
+  const reviews = document.querySelectorAll('.review-item');
+  const dots = document.querySelectorAll('.dot');
+  const totalReviews = reviews.length;
+
+  // Make functions globally accessible
+  window.nextReview = function() {
+    currentReviewIndex = (currentReviewIndex + 1) % totalReviews;
+    showReview(currentReviewIndex);
+  };
+
+  window.previousReview = function() {
+    currentReviewIndex = (currentReviewIndex - 1 + totalReviews) % totalReviews;
+    showReview(currentReviewIndex);
+  };
+
+  window.currentReview = function(index) {
+    currentReviewIndex = index;
+    showReview(currentReviewIndex);
+  };
+
+  // Initialize carousel
+  showReview(currentReviewIndex);
+
+  function showReview(index) {
+    // Hide all reviews
+    reviews.forEach(review => {
+      review.classList.remove('active');
+      review.style.display = 'none';
+    });
+
+    // Remove active class from all dots
+    dots.forEach(dot => {
+      dot.classList.remove('active');
+    });
+
+    // Show current review
+    reviews[index].classList.add('active');
+    reviews[index].style.display = 'flex';
+    
+    // Highlight current dot
+    dots[index].classList.add('active');
+  }
+
+  // Auto-play functionality
+  let autoSlideInterval = setInterval(nextReview, 5000);
+
+  // Pause auto-slide on hover
+  const carousel = document.querySelector('.reviews-carousel');
+  if (carousel) {
+    carousel.addEventListener('mouseenter', () => {
+      clearInterval(autoSlideInterval);
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+      autoSlideInterval = setInterval(nextReview, 5000);
+    });
+
+    // Touch support for mobile
+    let startX = 0;
+    let endX = 0;
+
+    carousel.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+    });
+
+    carousel.addEventListener('touchend', (e) => {
+      endX = e.changedTouches[0].clientX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      const diff = startX - endX;
+
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          nextReview(); // Swipe left - next review
+        } else {
+          previousReview(); // Swipe right - previous review
+        }
+      }
+    }
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+      previousReview();
+    } else if (e.key === 'ArrowRight') {
+      nextReview();
+    }
+  });
 });
