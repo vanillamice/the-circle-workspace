@@ -5,8 +5,10 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js",
+    "dev": "node scripts/build-config.js && nodemon server.js",
     "dev:https": "NODE_ENV=development HTTPS_PORT=3443 node server.js",
+    "build": "node scripts/build-config.js",
+    "postinstall": "node scripts/build-config.js",
     "backup": "node backup.js backup",
     "backup:sql": "node backup.js export",
     "backup:list": "node backup.js list",

@@ -278,7 +278,26 @@
     </div>
   </footer>
 
+  <!-- Configuration -->
+  <script src="js/config.js"></script>
+  
   <!-- Google Maps API -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8N2xz9l3qewKvVds5ZGzRohFi0HjsiyM&callback=initMap" async defer></script>
+  <script>
+    // Load Google Maps API using config variable
+    function loadGoogleMapsAPI() {
+      if (GOOGLE_MAPS_API_KEY && GOOGLE_MAPS_API_KEY !== 'YOUR_GOOGLE_MAPS_API_KEY_HERE') {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GOOGLE_MAPS_API_KEY)}&callback=initMap`;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+      } else {
+        console.error('Google Maps API key not configured. Please update js/config.js with your API key.');
+      }
+    }
+    
+    // Load API when page loads
+    document.addEventListener('DOMContentLoaded', loadGoogleMapsAPI);
+  </script>
 </body>
 </html>

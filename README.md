@@ -55,9 +55,19 @@ A modern workspace booking system with payment integration, built with Node.js, 
    PAYMOB_IFRAME_ID=your-paymob-iframe-id
    PAYMOB_HMAC_SECRET=your-paymob-hmac-secret
 
+   # Google Maps API Configuration
+   GOOGLE_MAPS_API_KEY=your-google-maps-api-key-here
+
    # CORS Configuration
    ALLOWED_ORIGINS=http://localhost:3000,https://localhost:3443
    ```
+
+4. **Set up frontend configuration**
+   Copy the example config file and update it with your API keys:
+   ```bash
+   cp js/config.example.js js/config.js
+   ```
+   Then edit `js/config.js` and replace `YOUR_GOOGLE_MAPS_API_KEY_HERE` with your actual Google Maps API key.
 
 4. **Start the development server**
    ```bash
@@ -97,6 +107,7 @@ Ensure your repository is ready for deployment:
    PAYMOB_IFRAME_ID=your-paymob-iframe-id
    PAYMOB_HMAC_SECRET=756BFB064CB3E5BD9FEC8A5606AAD2FE
    ALLOWED_ORIGINS=https://your-app-name.railway.app
+   GOOGLE_MAPS_API_KEY=your-google-maps-api-key-here
    ```
 
 3. **Update Paymob Callback URLs**
