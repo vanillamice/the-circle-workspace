@@ -108,6 +108,11 @@ Ensure your repository is ready for deployment:
    PAYMOB_HMAC_SECRET=756BFB064CB3E5BD9FEC8A5606AAD2FE
    ALLOWED_ORIGINS=https://your-app-name.railway.app
    GOOGLE_MAPS_API_KEY=your-google-maps-api-key-here
+   
+   # Default Admin Credentials (CHANGE THESE IN PRODUCTION!)
+   DEFAULT_ADMIN_USERNAME=your-admin-username
+   DEFAULT_ADMIN_PASSWORD=your-secure-admin-password
+   DEFAULT_ADMIN_EMAIL=admin@yourdomain.com
    ```
 
 3. **Update Paymob Callback URLs**
@@ -143,6 +148,9 @@ Ensure your repository is ready for deployment:
 | `PAYMOB_IFRAME_ID` | Paymob iFrame ID | Yes | `789012` |
 | `PAYMOB_HMAC_SECRET` | Paymob HMAC secret | Yes | `756BFB064CB3E5BD9FEC8A5606AAD2FE` |
 | `ALLOWED_ORIGINS` | CORS allowed origins | Yes | `https://your-app.railway.app` |
+| `DEFAULT_ADMIN_USERNAME` | Default admin username | Yes | `your-admin-username` |
+| `DEFAULT_ADMIN_PASSWORD` | Default admin password | Yes | `your-secure-password` |
+| `DEFAULT_ADMIN_EMAIL` | Default admin email | Yes | `admin@yourdomain.com` |
 
 ## Security Notes
 

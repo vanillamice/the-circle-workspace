@@ -133,15 +133,23 @@ function initializeDatabase() {
         db.run(`CREATE INDEX IF NOT EXISTS idx_orders_booking_id ON orders(booking_id)`);
 
         // Create default admin user if not exists
-        db.get("SELECT id FROM admin_users WHERE username = 'admin'", (err, row) => {
+        const defaultUsername = process.env.DEFAULT_ADMIN_USERNAME;
+        const defaultPassword = process.env.DEFAULT_ADMIN_PASSWORD;
+        const defaultAdminEmail = process.env.DEFAULT_ADMIN_EMAIL;
+        
+        if (!defaultUsername || !defaultPassword || !defaultAdminEmail) {
+            console.warn('⚠️ DEFAULT_ADMIN_USERNAME, DEFAULT_ADMIN_PASSWORD, and DEFAULT_ADMIN_EMAIL must be set in environment variables');
+            return;
+        }
+        
+        db.get("SELECT id FROM admin_users WHERE username = ?", [defaultUsername], (err, row) => {
             if (!row) {
-                const defaultPassword = 'admin123';
                 bcrypt.hash(defaultPassword, 10, (err, hash) => {
                     if (!err) {
                         db.run(`INSERT INTO admin_users (username, password_hash, email, role) 
                                 VALUES (?, ?, ?, ?)`, 
-                                ['admin', hash, 'admin@thecircle.com', 'admin']);
-                        console.log('Default admin user created: admin/admin123');
+                                [defaultUsername, hash, defaultAdminEmail, 'admin']);
+                        console.log(`Admin user created: ${defaultUsername}`);
                     }
                 });
             }
