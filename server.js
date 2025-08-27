@@ -161,13 +161,12 @@ function initializeDatabase() {
 const PAYMOB_CONFIG = {
     API_KEY: process.env.PAYMOB_API_KEY,
     INTEGRATION_ID: process.env.PAYMOB_INTEGRATION_ID,
-    IFRAME_ID: process.env.PAYMOB_IFRAME_ID,
     HMAC_SECRET: process.env.PAYMOB_HMAC_SECRET
 };
 
 // Validate required environment variables
 function validateConfig() {
-    const required = ['PAYMOB_API_KEY', 'PAYMOB_INTEGRATION_ID', 'PAYMOB_IFRAME_ID'];
+    const required = ['PAYMOB_API_KEY', 'PAYMOB_INTEGRATION_ID'];
     const missing = required.filter(key => !process.env[key]);
     
     if (missing.length > 0) {
@@ -338,6 +337,8 @@ app.post('/api/create-payment', async (req, res) => {
         const paymentKey = paymentKeyData.token;
         
         // Step 4: Generate hosted payment URL
+        const hostedUrl = `https://accept.paymob.com/api/acceptance/payments/pay?token=${paymentKey}`;
+        
         await storeBookingData({ name, email, phone: normalizedPhone, booking_type, amount_cents, orderId, paymentKey, start_date, end_date, start_time, end_time });
         
         res.json({
@@ -349,6 +350,15 @@ app.post('/api/create-payment', async (req, res) => {
         
     } catch (error) {
         console.error('Payment creation error:', error);
+        console.error('Error details:', {
+            message: error.message,
+            stack: error.stack,
+            config: {
+                hasApiKey: !!PAYMOB_CONFIG.API_KEY,
+                hasIntegrationId: !!PAYMOB_CONFIG.INTEGRATION_ID,
+                hasHmac: !!PAYMOB_CONFIG.HMAC_SECRET
+            }
+        });
         res.status(500).json({
             error: 'Payment creation failed',
             message: error.message
