@@ -46,23 +46,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     update();
     
-    // Auto-switch for hero slider only
-    if (slider.classList.contains('slider-hero')) {
-      let autoSlideInterval = setInterval(() => {
-        go(index + 1);
-      }, 3000); // Switch every 3 seconds
-      
-      // Pause auto-slide on hover
-      slider.addEventListener('mouseenter', () => {
-        clearInterval(autoSlideInterval);
-      });
-      
-      slider.addEventListener('mouseleave', () => {
-        autoSlideInterval = setInterval(() => {
-          go(index + 1);
-        }, 3000);
-      });
-    }
+    // Auto-switch for hero slider only - DISABLED for Safari compatibility
+    // if (slider.classList.contains('slider-hero')) {
+    //   let autoSlideInterval = setInterval(() => {
+    //     go(index + 1);
+    //   }, 3000); // Switch every 3 seconds
+    //   
+    //   // Pause auto-slide on hover
+    //   slider.addEventListener('mouseenter', () => {
+    //     clearInterval(autoSlideInterval);
+    //   });
+    //   
+    //   slider.addEventListener('mouseleave', () => {
+    //     autoSlideInterval = setInterval(() => {
+    //       go(index + 1);
+    //     }, 3000);
+    //   });
+    // }
   });
 
   // Intersection Observer for workspace text animation
