@@ -313,7 +313,7 @@ app.post('/api/create-payment', async (req, res) => {
         const failureUrl = `${baseUrl}/pages/payment-result.html?success=false`;
         
         console.log('Creating payment key with URLs:', { successUrl, failureUrl });
-        console.log('Payment key request payload:', {
+        const paymentKeyPayload = {
             auth_token: authToken,
             amount_cents: amount_cents,
             expiration: 3600,
@@ -323,46 +323,31 @@ app.post('/api/create-payment', async (req, res) => {
                 last_name: name.split(' ').slice(1).join(' ') || '',
                 email: email,
                 phone_number: normalizedPhone,
-                country: 'EG'
+                country: 'EG',
+                apartment: 'NA',
+                floor: 'NA',
+                street: 'NA',
+                building: 'NA',
+                shipping_method: 'NA',
+                postal_code: 'NA',
+                city: 'NA',
+                state: 'NA'
             },
             currency: currency || 'EGP',
             integration_id: parseInt(PAYMOB_CONFIG.INTEGRATION_ID),
             lock_order_when_paid: false,
             success_url: successUrl,
             failure_url: failureUrl
-        });
+        };
+        
+        console.log('Payment key request payload:', JSON.stringify(paymentKeyPayload, null, 2));
         
         const paymentKeyResponse = await fetch('https://accept.paymob.com/api/acceptance/payment_keys', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                auth_token: authToken,
-                amount_cents: amount_cents,
-                expiration: 3600, // 1 hour
-                order_id: orderId,
-                billing_data: {
-                    first_name: name.split(' ')[0] || name,
-                    last_name: name.split(' ').slice(1).join(' ') || '',
-                    email: email,
-                    phone_number: normalizedPhone,
-                    country: 'EG',
-                    apartment: 'NA',
-                    floor: 'NA',
-                    street: 'NA',
-                    building: 'NA',
-                    shipping_method: 'NA',
-                    postal_code: 'NA',
-                    city: 'NA',
-                    state: 'NA'
-                },
-                currency: currency || 'EGP',
-                integration_id: parseInt(PAYMOB_CONFIG.INTEGRATION_ID),
-                lock_order_when_paid: false,
-                success_url: successUrl,
-                failure_url: failureUrl
-            })
+            body: JSON.stringify(paymentKeyPayload)
         });
         
         console.log('Payment key response status:', paymentKeyResponse.status);
