@@ -35,17 +35,43 @@ app.use(express.static('.')); // Serve static files from current directory
 
 // Security middleware
 app.use((req, res, next) => {
-    // Security headers
-    res.setHeader('X-Content-Type-Options', 'nosniff');
+    // Clickjacking Protection - Prevent site from being embedded in iframes
     res.setHeader('X-Frame-Options', 'DENY');
+    
+    // Content Type Sniffing Protection - Prevent MIME type sniffing
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    
+    // XSS Protection
     res.setHeader('X-XSS-Protection', '1; mode=block');
+    
+    // Referrer Policy - Control referrer information
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    
+    // Permissions Policy - Control browser features
+    res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
     
     // Only set HSTS in production with HTTPS
     if (process.env.NODE_ENV === 'production') {
-        res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+        res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
     }
     
-    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';");
+    // Comprehensive Content Security Policy for production
+    const cspDirectives = [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-inline' https://accept.paymob.com",
+        "style-src 'self' 'unsafe-inline'",
+        "img-src 'self' data: https:",
+        "font-src 'self'",
+        "connect-src 'self' https://accept.paymob.com https://api.paymob.com",
+        "frame-src 'none'",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+        "frame-ancestors 'none'",
+        "upgrade-insecure-requests"
+    ];
+    
+    res.setHeader('Content-Security-Policy', cspDirectives.join('; '));
     
     next();
 });
@@ -320,7 +346,7 @@ app.post('/api/create-payment', async (req, res) => {
             order_id: orderId,
             billing_data: {
                 first_name: name.split(' ')[0] || name,
-                last_name: name.split(' ').slice(1).join(' ') || '',
+                last_name: name.split(' ').slice(1).join(' ') || 'Customer',
                 email: email,
                 phone_number: normalizedPhone,
                 country: 'EG',
