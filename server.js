@@ -222,6 +222,12 @@ function checkLoginRateLimit(req, res, next) {
 // Create Paymob payment endpoint
 app.post('/api/create-payment', async (req, res) => {
     try {
+        console.log('Payment request received:', { 
+            hasApiKey: !!PAYMOB_CONFIG.API_KEY,
+            hasIntegrationId: !!PAYMOB_CONFIG.INTEGRATION_ID,
+            integrationId: PAYMOB_CONFIG.INTEGRATION_ID
+        });
+        
         const { name, email, phone, booking_type, amount_cents, currency, start_date, end_date, start_time, end_time, booking_description } = req.body;
         
         // Validate required fields
@@ -247,6 +253,7 @@ app.post('/api/create-payment', async (req, res) => {
         }
         
         // Step 1: Create authentication token
+        console.log('Attempting Paymob authentication...');
         const authResponse = await fetch('https://accept.paymob.com/api/auth/tokens', {
             method: 'POST',
             headers: {
@@ -257,14 +264,19 @@ app.post('/api/create-payment', async (req, res) => {
             })
         });
         
+        console.log('Auth response status:', authResponse.status);
         if (!authResponse.ok) {
-            throw new Error('Failed to authenticate with Paymob');
+            const authError = await authResponse.text();
+            console.error('Auth error response:', authError);
+            throw new Error(`Failed to authenticate with Paymob: ${authResponse.status} - ${authError}`);
         }
         
         const authData = await authResponse.json();
         const authToken = authData.token;
+        console.log('Auth successful, token received');
         
         // Step 2: Create order
+        console.log('Creating Paymob order...');
         const orderResponse = await fetch('https://accept.paymob.com/api/ecommerce/orders', {
             method: 'POST',
             headers: {
@@ -284,8 +296,11 @@ app.post('/api/create-payment', async (req, res) => {
             })
         });
         
+        console.log('Order response status:', orderResponse.status);
         if (!orderResponse.ok) {
-            throw new Error('Failed to create Paymob order');
+            const orderError = await orderResponse.text();
+            console.error('Order error response:', orderError);
+            throw new Error(`Failed to create Paymob order: ${orderResponse.status} - ${orderError}`);
         }
         
         const orderData = await orderResponse.json();
