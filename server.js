@@ -4,13 +4,10 @@ const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const path = require('path');
-const https = require('https');
-const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const HTTPS_PORT = process.env.HTTPS_PORT || 3443;
 
 // Middleware
 app.use(cors({
@@ -50,12 +47,9 @@ app.use((req, res, next) => {
     // Permissions Policy - Control browser features
     res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
     
-    // Only set HSTS in production with HTTPS
-    if (process.env.NODE_ENV === 'production') {
-        res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-    }
+    // HSTS - Railway handles this automatically
     
-    // Comprehensive Content Security Policy for production
+    // Basic Content Security Policy
     const cspDirectives = [
         "default-src 'self'",
         "script-src 'self' 'unsafe-inline' https://accept.paymob.com",
@@ -66,9 +60,7 @@ app.use((req, res, next) => {
         "frame-src 'none'",
         "object-src 'none'",
         "base-uri 'self'",
-        "form-action 'self'",
-        "frame-ancestors 'none'",
-        "upgrade-insecure-requests"
+        "form-action 'self'"
     ];
     
     res.setHeader('Content-Security-Policy', cspDirectives.join('; '));
@@ -1414,17 +1406,20 @@ if (process.env.NODE_ENV === 'production') {
     console.log('For HTTPS in development, run: npm run dev:https');
 }
 
-// HTTP Server (fallback and development)
+// Start server (Railway handles SSL termination)
 app.listen(PORT, () => {
-    console.log(`🌐 HTTP Server running on port ${PORT}`);
-    console.log(`🌐 Admin login: http://localhost:${PORT}/pages/admin-login.html`);
-    console.log(`🌐 Admin dashboard: http://localhost:${PORT}/pages/admin-dashboard.html`);
-    console.log(`🌐 API endpoints: http://localhost:${PORT}/api/`);
-    console.log(`🌐 Payment endpoint: http://localhost:${PORT}/api/create-payment`);
-    console.log(`🌐 Webhook endpoint: http://localhost:${PORT}/api/paymob-webhook`);
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🔒 Railway handles SSL/HTTPS automatically`);
+    console.log(`📊 Admin login: /pages/admin-login.html`);
+    console.log(`📊 Admin dashboard: /pages/admin-dashboard.html`);
+    console.log(`🔗 API endpoints: /api/`);
+    console.log(`💳 Payment endpoint: /api/create-payment`);
+    console.log(`🔔 Webhook endpoint: /api/paymob-webhook`);
     
-    if (process.env.NODE_ENV === 'production' && !httpsServer) {
-        console.warn('⚠️ WARNING: Running in production without HTTPS!');
-        console.warn('Set up SSL certificates for production deployment.');
+    if (process.env.NODE_ENV === 'production') {
+        console.log(`✅ Production mode with Railway SSL`);
+    } else {
+        console.log(`🔄 Development mode - use Railway for production HTTPS`);
     }
 });
