@@ -1179,6 +1179,16 @@ footer {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
+/* Safari-specific fix for hero text visibility */
+@supports (-webkit-appearance: none) {
+  .hero-title,
+  .hero-subtitle {
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 999 !important;
+  }
+}
+
 .aurora-subtitle {
   font-size: clamp(1.36rem, 3.3vw, 2.1rem);
   color: rgba(255, 255, 255, 0.9);
