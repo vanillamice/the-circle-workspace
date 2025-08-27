@@ -305,11 +305,32 @@ app.post('/api/create-payment', async (req, res) => {
         
         const orderData = await orderResponse.json();
         const orderId = orderData.id;
+        console.log('Order created successfully, ID:', orderId);
         
         // Step 3: Create payment key
         const baseUrl = `${req.protocol}://${req.get('host')}`;
         const successUrl = `${baseUrl}/pages/payment-result.html?success=true`;
         const failureUrl = `${baseUrl}/pages/payment-result.html?success=false`;
+        
+        console.log('Creating payment key with URLs:', { successUrl, failureUrl });
+        console.log('Payment key request payload:', {
+            auth_token: authToken,
+            amount_cents: amount_cents,
+            expiration: 3600,
+            order_id: orderId,
+            billing_data: {
+                first_name: name.split(' ')[0] || name,
+                last_name: name.split(' ').slice(1).join(' ') || '',
+                email: email,
+                phone_number: normalizedPhone,
+                country: 'EG'
+            },
+            currency: currency || 'EGP',
+            integration_id: parseInt(PAYMOB_CONFIG.INTEGRATION_ID),
+            lock_order_when_paid: false,
+            success_url: successUrl,
+            failure_url: failureUrl
+        });
         
         const paymentKeyResponse = await fetch('https://accept.paymob.com/api/acceptance/payment_keys', {
             method: 'POST',
@@ -344,8 +365,11 @@ app.post('/api/create-payment', async (req, res) => {
             })
         });
         
+        console.log('Payment key response status:', paymentKeyResponse.status);
         if (!paymentKeyResponse.ok) {
-            throw new Error('Failed to create payment key');
+            const paymentKeyError = await paymentKeyResponse.text();
+            console.error('Payment key error response:', paymentKeyError);
+            throw new Error(`Failed to create payment key: ${paymentKeyResponse.status} - ${paymentKeyError}`);
         }
         
         const paymentKeyData = await paymentKeyResponse.json();
