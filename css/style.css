@@ -1181,11 +1181,42 @@ footer {
 
 /* Safari-specific fix for hero text visibility */
 @supports (-webkit-appearance: none) {
+  /* Force opacity and prevent Safari from changing it */
   .hero-title,
-  .hero-subtitle {
+  .hero-subtitle,
+  .hero-overlay,
+  .hero-overlay-inner,
+  .slider-btn {
     opacity: 1 !important;
     visibility: visible !important;
-    z-index: 999 !important;
+    -webkit-transform: translateZ(0) !important;
+    transform: translateZ(0) !important;
+    will-change: auto !important;
+  }
+  
+  /* Prevent Safari from hiding elements during transitions */
+  .slider-hero * {
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
+    -webkit-transform: translate3d(0,0,0) !important;
+    transform: translate3d(0,0,0) !important;
+  }
+  
+  /* Force hardware acceleration to prevent opacity glitches */
+  .hero-overlay {
+    -webkit-transform: translateZ(0) !important;
+    transform: translateZ(0) !important;
+    -webkit-perspective: 1000 !important;
+    perspective: 1000 !important;
+  }
+  
+  /* Prevent Safari from animating opacity unintentionally */
+  .slider-btn.prev,
+  .slider-btn.next {
+    -webkit-transition: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 }
 
