@@ -203,14 +203,16 @@
                 <div class="form-group">
                     <label class="form-label">Payment Method</label>
                     <div class="payment-method-options">
+                        <!-- Paymob payment option temporarily disabled
                         <div class="payment-option-btn" data-method="paymob" onclick="selectPaymentMethod('paymob')">
                             <span class="payment-option-text">Pay Online (Paymob)</span>
                         </div>
+                        -->
                         <div class="payment-option-btn" data-method="reception" onclick="selectPaymentMethod('reception')">
                             <span class="payment-option-text">Pay at Reception</span>
                         </div>
                     </div>
-                    <input type="hidden" id="selected-payment-method" value="paymob">
+                    <input type="hidden" id="selected-payment-method" value="reception">
                 </div>
                 <div class="modal-buttons">
                     <button type="button" class="modal-btn secondary" onclick="closeUserInfoModal()">Cancel</button>
@@ -228,7 +230,6 @@
             <button class="modal-btn" onclick="closeModal()">Close</button>
         </div>
     </div>
-
     <script src="../js/booking-script.js"></script>
 </body>
 </html> 

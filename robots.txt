@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# Allow crawling of main pages
+Allow: /index.html
+Allow: /pages/about.html
+Allow: /pages/booking.html
+Allow: /pages/faq.html
+
+# Allow crawling of assets
+Allow: /css/
+Allow: /js/
+Allow: /assets/
+
+# Disallow admin and sensitive areas
+Disallow: /pages/admin-login.html
+Disallow: /pages/admin-dashboard.html
+Disallow: /api/
+Disallow: /circle.db
+Disallow: /backups/
+
+# Sitemap location
+Sitemap: https://www.circleworkspace.com/sitemap.xml
+
+# Crawl delay (optional - helps with server load)
+Crawl-delay: 1
