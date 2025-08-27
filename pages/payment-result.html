@@ -3,98 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Result - The Circle</title>
+        <title>Payment Result - The Circle Coworking Space</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Payment result for your booking at The Circle coworking space in Alexandria, Egypt.">
+    <meta name="keywords" content="payment result, booking confirmation, coworking space Alexandria">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Payment Result - The Circle Coworking Space">
+    <meta property="og:description" content="Payment result for your booking at The Circle coworking space in Alexandria, Egypt.">
+    <meta property="og:image" content="../assets/images/circlebannerdark.jpeg">
+    <meta property="og:url" content="https://www.circleworkspace.com/pages/payment-result.html">
+    <meta property="og:type" content="website">
+    
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/booking-styles.css">
-    <style>
-        .payment-result {
-            text-align: center;
-            padding: 4rem 2rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .payment-icon {
-            font-size: 4rem;
-            margin-bottom: 2rem;
-        }
-        
-        .success .payment-icon {
-            color: var(--green);
-        }
-        
-        .error .payment-icon {
-            color: #ff4444;
-        }
-        
-        .payment-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        
-        .payment-message {
-            font-size: 1.1rem;
-            color: rgba(17, 17, 17, 0.7);
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-        
-        .payment-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .btn {
-            padding: 0.8rem 2rem;
-            border-radius: 12px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-        
-        .btn-primary {
-            background: var(--green);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: var(--light-green);
-        }
-        
-        .btn-secondary {
-            background: rgba(17, 17, 17, 0.1);
-            color: var(--text-main);
-        }
-        
-        .btn-secondary:hover {
-            background: rgba(17, 17, 17, 0.2);
-        }
-    </style>
+    <link rel="stylesheet" href="../css/payment-result-styles.css">
+    <link rel="icon" type="image/svg+xml" href="../assets/logos/thecircletransparent.svg">
 </head>
 <body>
     <header>
         <a href="../index.html">
-            <img src="../assets/logos/thecircletransparent.svg" alt="the circle logo" />
+            <img src="../assets/logos/thecircletransparent.svg" alt="The Circle workspace logo" />
         </a>
         <div class="btn-row">
+            <button class="btn-34" onclick="window.location.href='booking.html'"><span>booking</span></button>
             <button class="btn-34" onclick="window.location.href='faq.html'"><span>faq</span></button>
         </div>
     </header>
 
     <main>
-        <div class="payment-result" id="payment-result">
-            <!-- Content will be populated by JavaScript -->
+        <div class="payment-result-container">
+            <div class="result-card" id="result-card">
+                <!-- Content will be populated by JavaScript -->
+            </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-logo">
-                <img src="../assets/logos/thecircletransparent.svg" alt="the circle logo" />
+                <img src="../assets/logos/thecircletransparent.svg" alt="The Circle workspace logo" />
             </div>
             
             <div class="footer-social">
@@ -105,7 +54,7 @@
                 </a>
                 <a href="https://www.instagram.com/circleworkspace/" target="_blank" rel="noopener" aria-label="Instagram">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.617-6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                     </svg>
                 </a>
                 <a href="https://www.linkedin.com/company/circleworkspace/posts/?feedView=all" target="_blank" rel="noopener" aria-label="LinkedIn">
@@ -115,60 +64,16 @@
                 </a>
             </div>
             
-                        <div class="footer-links">
-              <a href="faq.html">FAQ</a>
-              <a href="booking.html">Booking</a>
-              <a href="mailto:contact@circleworkspace.com">contact@circleworkspace.com</a>
-              <a href="tel:+201034708850">+20 10 34708850</a>
+            <div class="footer-links">
+                <a href="faq.html">FAQ</a>
+                <a href="booking.html">Booking</a>
+                <a href="about.html">About Us</a>
+                <a href="mailto:contact@circleworkspace.com">contact@circleworkspace.com</a>
+                <a href="tel:+201034708850">+20 10 34708850</a>
             </div>
         </div>
     </footer>
 
-    <script>
-        // Handle payment result
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const success = urlParams.get('success');
-            const transactionId = urlParams.get('transaction_id');
-            const orderId = urlParams.get('order_id');
-            
-            const resultContainer = document.getElementById('payment-result');
-            
-            if (success === 'true') {
-                // Payment successful
-                resultContainer.className = 'payment-result success';
-                resultContainer.innerHTML = `
-                    <div class="payment-icon">✓</div>
-                    <h1 class="payment-title">Payment Successful!</h1>
-                    <p class="payment-message">
-                        Your booking has been confirmed and payment processed successfully. 
-                        You will receive a confirmation email shortly with your booking details.
-                        ${transactionId ? `<br><strong>Transaction ID:</strong> ${transactionId}` : ''}
-                        ${orderId ? `<br><strong>Order ID:</strong> ${orderId}` : ''}
-                    </p>
-                    <div class="payment-actions">
-                        <a href="../index.html" class="btn btn-primary">Return to Home</a>
-                        <a href="booking.html" class="btn btn-secondary">Book Another Space</a>
-                    </div>
-                `;
-            } else {
-                // Payment failed or cancelled
-                resultContainer.className = 'payment-result error';
-                resultContainer.innerHTML = `
-                    <div class="payment-icon">✗</div>
-                    <h1 class="payment-title">Payment Failed</h1>
-                    <p class="payment-message">
-                        Your payment was not completed. This could be due to insufficient funds, 
-                        card issues, or the payment was cancelled. Please try again or contact 
-                        support if you continue to have issues.
-                    </p>
-                    <div class="payment-actions">
-                        <a href="booking.html" class="btn btn-primary">Try Again</a>
-                        <a href="../index.html" class="btn btn-secondary">Return to Home</a>
-                    </div>
-                `;
-            }
-        });
-    </script>
+    <script src="../js/payment-result.js"></script>
 </body>
 </html>
