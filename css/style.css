@@ -1181,40 +1181,47 @@ footer {
 
 /* Safari-specific fix for hero text visibility */
 @supports (-webkit-appearance: none) {
-  /* Force opacity and prevent Safari from changing it */
+  /* Fix opacity without breaking interactions */
   .hero-title,
   .hero-subtitle,
   .hero-overlay,
-  .hero-overlay-inner,
+  .hero-overlay-inner {
+    opacity: 1 !important;
+    visibility: visible !important;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  
+  /* Fix slider buttons WITHOUT disabling transitions */
   .slider-btn {
     opacity: 1 !important;
     visibility: visible !important;
-    -webkit-transform: translateZ(0) !important;
-    transform: translateZ(0) !important;
-    will-change: auto !important;
+    pointer-events: auto !important;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    /* Remove the transition: none that broke functionality */
   }
   
-  /* Prevent Safari from hiding elements during transitions */
-  .slider-hero * {
-    -webkit-backface-visibility: hidden !important;
-    backface-visibility: hidden !important;
-    -webkit-transform: translate3d(0,0,0) !important;
-    transform: translate3d(0,0,0) !important;
-  }
-  
-  /* Force hardware acceleration to prevent opacity glitches */
-  .hero-overlay {
-    -webkit-transform: translateZ(0) !important;
-    transform: translateZ(0) !important;
-    -webkit-perspective: 1000 !important;
-    perspective: 1000 !important;
-  }
-  
-  /* Prevent Safari from animating opacity unintentionally */
   .slider-btn.prev,
   .slider-btn.next {
-    -webkit-transition: none !important;
-    transition: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    z-index: 1001 !important;
+    position: absolute !important;
+  }
+  
+  /* Prevent disappearing but keep slider working */
+  .slider-hero {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  
+  /* Fix for slides without breaking slider logic */
+  .slides,
+  .slide {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
     opacity: 1 !important;
     visibility: visible !important;
   }
