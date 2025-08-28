@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>the circle – join form</title>
+  <!-- Security headers -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <style>
+    :root {
+      --bg: #f4f3f1;
+      --card-bg: #fff;
+      --text-main: #111;
+      --text-accent: #111;
+      --border: #111;
+      --shadow: 0 4px 24px 0 rgba(0,0,0,0.07);
+      --divider: #1112;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: 'SF Pro', 'SF Pro Display', 'SF Pro Text', 'San Francisco', 'Helvetica Neue', Arial, sans-serif;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: var(--bg);
+      z-index: 100;
+      border-bottom: 3px solid #111;
+      padding: 1.125rem 0 0.75rem 0;
+      text-align: center;
+      font-size: 2.4rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: lowercase;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 0 2px 16px #7f5af033, 0 1px 2px #fff2;
+      position: relative;
+    }
+    .logo-circle {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 0.2em;
+    }
+    .logo-text {
+      position: relative;
+      font-family: 'SF Pro', 'SF Pro Display', 'SF Pro Text', 'San Francisco', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 2.7rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: lowercase;
+      color: var(--text-main);
+      z-index: 1;
+      padding: 0.2em 1.2em;
+    }
+    .form-section {
+      width: 100%;
+      max-width: 480px;
+      margin: 3.5rem auto 0 auto;
+      padding: 2.5rem 1.5rem 2.5rem 1.5rem;
+      background: var(--card-bg);
+      border: 3.25px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    .form-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 1.2rem;
+      text-align: center;
+      letter-spacing: 0.01em;
+      text-transform: lowercase;
+    }
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    label {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+      color: var(--text-main);
+      display: block;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 1.1rem;
+      background: #faf9f7;
+      color: var(--text-main);
+      box-sizing: border-box;
+      margin-bottom: 0.2rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus {
+      border-color: #037c00;
+    }
+    .form-error {
+      color: #c00;
+      font-size: 0.98rem;
+      margin-top: -0.7rem;
+      margin-bottom: 0.7rem;
+      min-height: 1.2em;
+    }
+    button[type="submit"] {
+      background: #111;
+      color: #fff;
+      font-size: 1.15rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      padding: 0.9rem 0;
+      margin-top: 0.7rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.07);
+      transition: background 0.2s;
+    }
+    button[type="submit"]:hover {
+      background: #037c00;
+    }
+    button[type="submit"]:disabled {
+      background: #666;
+      cursor: not-allowed;
+    }
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .json-result {
+      margin-top: 2.2rem;
+      background: #faf9f7;
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+      font-size: 1.08rem;
+      color: #222;
+      word-break: break-all;
+      white-space: pre-wrap;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (max-width: 700px) {
+      .form-section { padding-left: 0.5rem; padding-right: 0.5rem; max-width: 100vw; }
+      .form-title { font-size: 1.3rem; }
+      form { gap: 0.7rem; }
+      input, select { font-size: 1rem; padding: 0.6rem 0.7rem; }
+      button[type="submit"] { font-size: 1rem; padding: 0.7rem 0; }
+      .json-result { font-size: 0.98rem; padding: 0.7rem; }
+      header img {
+        width: 90px !important;
+        height: 90px !important;
+        max-width: 60vw !important;
+        max-height: 18vh !important;
+      }
+      header { font-size: 1.3rem; padding: 0.7rem 0 0.5rem 0; }
+    }
+  </style>
+</head>
+<body>
+  <header style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <img src="thecircletransparent.svg" alt="the circle logo" style="width:150px;height:150px;max-width:80vw;max-height:30vh;display:block;margin:0 auto;" />
+  </header>
+  <section class="form-section" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <div class="form-title">Welcome to the circle!</div>
+    <form action="https://formsubmit.co/contact@circleworkspace.com" method="POST" autocomplete="off" id="circleForm">
+      <!-- FormSubmit Configuration -->
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="https://thecircleworkspace.com/thank-you.html">
+      <input type="hidden" name="_subject" value="Form Submission - The Circle">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_autoresponse" value="Thank you for your submission! We will contact you within 24 hours.">
+      
+      <div>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required placeholder="Your name" maxlength="100" />
+        <div class="form-error" id="error-name"></div>
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required placeholder="you@email.com" maxlength="254" />
+        <div class="form-error" id="error-email"></div>
+      </div>
+      <div>
+        <label for="number">Number <span style="font-weight:400;font-size:0.98em;">(include country code, e.g. +20...)</span></label>
+        <input type="tel" id="number" name="number" required pattern="^\+\d{1,4}\d{6,14}$" placeholder="+201234567890" maxlength="20" />
+        <div class="form-error" id="error-number"></div>
+      </div>
+      <div>
+        <label for="occupation">Occupation</label>
+        <input type="text" id="occupation" name="occupation" required placeholder="What do you do?" maxlength="100" />
+        <div class="form-error" id="error-occupation"></div>
+      </div>
+      <div>
+        <label for="passType">Type of pass</label>
+        <select id="passType" name="passType" required>
+          <option value="" disabled selected>Select a pass</option>
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Monthly">Monthly</option>
+        </select>
+        <div class="form-error" id="error-passType"></div>
+      </div>
+      <button type="submit" id="submitBtn">Submit</button>
+    </form>
+    <div class="json-result" id="jsonResult" style="display:none;"></div>
+  </section>
+  <footer style="width:100%;padding:2.2rem 0 1.2rem 0;text-align:center;color:var(--text-accent);font-size:1rem;border-top:1px solid var(--divider);background:none;margin-top:auto;">
+    &copy; 2025 the circle
+  </footer>
+  <script>
+    // Email regex: RFC 5322 compliant
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    const numberRegex = /^\+\d{1,4}\d{6,14}$/;
+    
+    // Rate limiting
+    let submitAttempts = 0;
+    const maxAttempts = 3;
+    const lockoutTime = 5 * 60 * 1000; // 5 minutes
+    let lockoutUntil = 0;
+
+    document.getElementById('circleForm').addEventListener('submit', function(e) {
+      // Check rate limiting
+      if (Date.now() < lockoutUntil) {
+        e.preventDefault();
+        const remainingTime = Math.ceil((lockoutUntil - Date.now()) / 1000 / 60);
+        alert(`Too many submission attempts. Please wait ${remainingTime} minutes before trying again.`);
+        return;
+      }
+
+      let valid = true;
+      const submitBtn = document.getElementById('submitBtn');
+      
+      // Disable submit button and show loading state
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+      document.getElementById('circleForm').classList.add('loading');
+
+      // Clear errors
+      ['name','email','number','occupation','passType'].forEach(id => {
+        document.getElementById('error-' + id).textContent = '';
+      });
+
+      // Name validation
+      const name = document.getElementById('name').value.trim();
+      if (!name) {
+        document.getElementById('error-name').textContent = 'Name is required.';
+        valid = false;
+      } else if (name.length < 2) {
+        document.getElementById('error-name').textContent = 'Name must be at least 2 characters.';
+        valid = false;
+      }
+
+      // Email validation
+      const email = document.getElementById('email').value.trim();
+      if (!email) {
+        document.getElementById('error-email').textContent = 'Email is required.';
+        valid = false;
+      } else if (!emailRegex.test(email)) {
+        document.getElementById('error-email').textContent = 'Please enter a valid email address.';
+        valid = false;
+      }
+
+      // Number validation
+      const number = document.getElementById('number').value.trim();
+      if (!number) {
+        document.getElementById('error-number').textContent = 'Number is required.';
+        valid = false;
+      } else if (!numberRegex.test(number)) {
+        document.getElementById('error-number').textContent = 'Please include country code (e.g. +201234567890).';
+        valid = false;
+      }
+
+      // Occupation validation
+      const occupation = document.getElementById('occupation').value.trim();
+      if (!occupation) {
+        document.getElementById('error-occupation').textContent = 'Occupation is required.';
+        valid = false;
+      } else if (occupation.length < 2) {
+        document.getElementById('error-occupation').textContent = 'Occupation must be at least 2 characters.';
+        valid = false;
+      }
+
+      // Pass Type validation
+      const passType = document.getElementById('passType').value;
+      if (!passType) {
+        document.getElementById('error-passType').textContent = 'Please select a type of pass.';
+        valid = false;
+      }
+
+      if (!valid) {
+        e.preventDefault();
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit';
+        document.getElementById('circleForm').classList.remove('loading');
+        return;
+      }
+
+      // Increment submit attempts
+      submitAttempts++;
+      
+      // Check if we've exceeded max attempts
+      if (submitAttempts >= maxAttempts) {
+        lockoutUntil = Date.now() + lockoutTime;
+        alert('Too many submission attempts. Please wait 5 minutes before trying again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit';
+        document.getElementById('circleForm').classList.remove('loading');
+        e.preventDefault();
+        return;
+      }
+
+      // Form is valid, let it submit
+      console.log('Form submitted successfully');
+    });
+
+    // Real-time validation
+    document.getElementById('name').addEventListener('input', function() {
+      const name = this.value.trim();
+      const errorEl = document.getElementById('error-name');
+      if (name && name.length < 2) {
+        errorEl.textContent = 'Name must be at least 2 characters.';
+      } else {
+        errorEl.textContent = '';
+      }
+    });
+
+    document.getElementById('email').addEventListener('input', function() {
+      const email = this.value.trim();
+      const errorEl = document.getElementById('error-email');
+      if (email && !emailRegex.test(email)) {
+        errorEl.textContent = 'Please enter a valid email address.';
+      } else {
+        errorEl.textContent = '';
+      }
+    });
+
+    document.getElementById('number').addEventListener('input', function() {
+      const number = this.value.trim();
+      const errorEl = document.getElementById('error-number');
+      if (number && !numberRegex.test(number)) {
+        errorEl.textContent = 'Please include country code (e.g. +201234567890).';
+      } else {
+        errorEl.textContent = '';
+      }
+    });
+
+    document.getElementById('occupation').addEventListener('input', function() {
+      const occupation = this.value.trim();
+      const errorEl = document.getElementById('error-occupation');
+      if (occupation && occupation.length < 2) {
+        errorEl.textContent = 'Occupation must be at least 2 characters.';
+      } else {
+        errorEl.textContent = '';
+      }
+    });
+  </script>
+</body>
+</html> 
