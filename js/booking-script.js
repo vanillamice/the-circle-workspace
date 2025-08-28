@@ -603,19 +603,20 @@ function closeModal() {
     document.getElementById('success-modal').classList.remove('show');
 }
 
-// Update button text based on payment method
-function updateButtonText() {
-    const paymentMethod = document.querySelector('input[name="payment-method"]:checked');
-    const checkoutBtn = document.getElementById('checkout-btn');
-    
-    if (paymentMethod && checkoutBtn) {
-        if (paymentMethod.value === 'paymob') {
-            checkoutBtn.textContent = 'Proceed to Payment';
-        } else {
-            checkoutBtn.textContent = 'Create Booking';
-        }
-    }
-}
+
+// Update button text based on payment method (OLD VERSION - KEPT FOR REFERENCE)
+// function updateButtonText() {
+//     const paymentMethod = document.querySelector('input[name="payment-method"]:checked');
+//     const checkoutBtn = document.getElementById('checkout-btn');
+//     
+//     if (paymentMethod && checkoutBtn) {
+//         if (paymentMethod.value === 'paymob') {
+//             checkoutBtn.textContent = 'Proceed to Payment';
+//         } else {
+//             checkoutBtn.textContent = 'Create Booking';
+//         }
+//     }
+// }
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', function() {

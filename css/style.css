@@ -237,17 +237,17 @@ main {
   max-width: 62ch;
 }
 
-/* Button 44 for hero section */
-.btn-44,
-.btn-44 *,
-.btn-44 :after,
-.btn-44 :before,
-.btn-44:after,
-.btn-44:before {
+/* Hero Button 44 for hero section */
+.hero-btn-44,
+.hero-btn-44 *,
+.hero-btn-44 :after,
+.hero-btn-44 :before,
+.hero-btn-44:after,
+.hero-btn-44:before {
   border: 0 solid;
   box-sizing: border-box;
 }
-.btn-44 {
+.hero-btn-44 {
   -webkit-tap-highlight-color: transparent;
   -webkit-appearance: button;
   background-color: #000;
@@ -257,47 +257,50 @@ main {
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
     Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-  font-size: 100%;
+  font-size: clamp(0.6rem, 0.8vw, 0.75rem);
   font-weight: 900;
   line-height: 1.5;
   margin: 0;
   -webkit-mask-image: -webkit-radial-gradient(#000, #fff);
   padding: 0;
 }
-.btn-44:disabled {
+.hero-btn-44:disabled {
   cursor: default;
 }
-.btn-44:-moz-focusring {
+.hero-btn-44:-moz-focusring {
   outline: auto;
 }
-.btn-44 svg {
+.hero-btn-44 svg {
   display: block;
   vertical-align: middle;
 }
-.btn-44 [hidden] {
+.hero-btn-44 [hidden] {
   display: none;
 }
-.btn-44 {
-  border: 1px solid;
-  border-radius: 999px;
-  box-sizing: border-box;
-  display: block;
-  overflow: hidden;
-  padding: clamp(0.4rem, 0.8vh, 0.6rem) clamp(0.8rem, 1.2vw, 1rem);
-  position: relative;
-  text-transform: uppercase;
-  margin-top: clamp(1.5rem, 3vw, 2.5rem);
-  margin-left: clamp(1rem, 3vw, 3rem);
-  font-size: clamp(0.6rem, 0.8vw, 0.75rem);
-  max-width: 140px;
-  width: auto;
+.hero-btn-44 {
+  border: 1px solid !important;
+  border-radius: 999px !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  overflow: hidden !important;
+  padding: clamp(0.4rem, 0.8vh, 0.6rem) clamp(0.8rem, 1.2vw, 1rem) !important;
+  position: relative !important;
+  text-transform: uppercase !important;
+  margin-top: clamp(1.5rem, 3vw, 2.5rem) !important;
+  margin-left: clamp(1rem, 3vw, 3rem) !important;
+  font-size: clamp(0.6rem, 0.8vw, 0.75rem) !important;
+  max-width: 140px !important;
+  width: auto !important;
+  background-color: #000 !important;
+  color: #fff !important;
 }
-.btn-44 span {
-  font-weight: 900;
-  mix-blend-mode: difference;
+.hero-btn-44 span {
+  font-weight: 900 !important;
+  mix-blend-mode: difference !important;
+  color: #fff !important;
 }
-.btn-44:after,
-.btn-44:before {
+.hero-btn-44:after,
+.hero-btn-44:before {
   background: #fff;
   content: "";
   height: 100%;
@@ -308,13 +311,13 @@ main {
   width: 100%;
   will-change: transform;
 }
-.btn-44:after {
+.hero-btn-44:after {
   background: #dedede;
   transition-delay: 0.13s;
   z-index: -1;
 }
-.btn-44:hover:after,
-.btn-44:hover:before {
+.hero-btn-44:hover:after,
+.hero-btn-44:hover:before {
   transform: translateY(100%);
 }
 
@@ -394,15 +397,14 @@ main {
   color: #111;
   line-height: 1.4;
   margin: 0;
-  opacity: 0 !important;
-  transform: translateY(30px) !important;
-  transition: opacity 1s ease-out, transform 1s ease-out !important;
-  will-change: opacity, transform;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
 }
 
 .nomad-text.animate {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 

@@ -97,6 +97,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     observer.observe(nomadText);
+    
+    // Fallback: animate after 2 seconds if not triggered
+    setTimeout(() => {
+      if (!nomadText.classList.contains('animate')) {
+        nomadText.classList.add('animate');
+      }
+    }, 2000);
   }
 
   // Intersection Observer for after hours text animation
