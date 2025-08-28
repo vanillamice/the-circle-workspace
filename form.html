@@ -221,14 +221,17 @@
         <div class="form-error" id="error-occupation"></div>
       </div>
       <div>
-        <label for="passType">Type of pass</label>
-        <select id="passType" name="passType" required>
-          <option value="" disabled selected>Select a pass</option>
-          <option value="Daily">Daily</option>
-          <option value="Weekly">Weekly</option>
-          <option value="Monthly">Monthly</option>
+        <label for="source">How did you know about us?</label>
+        <select id="source" name="source" required>
+          <option value="" disabled selected>Select an option</option>
+          <option value="Social Media">Social Media</option>
+          <option value="Google Search">Google Search</option>
+          <option value="Friend/Referral">Friend/Referral</option>
+          <option value="Walk-in">Walk-in</option>
+          <option value="Event">Event</option>
+          <option value="Other">Other</option>
         </select>
-        <div class="form-error" id="error-passType"></div>
+        <div class="form-error" id="error-source"></div>
       </div>
       <button type="submit" id="submitBtn">Submit</button>
     </form>
@@ -266,7 +269,7 @@
       document.getElementById('circleForm').classList.add('loading');
 
       // Clear errors
-      ['name','email','number','occupation','passType'].forEach(id => {
+      ['name','email','number','occupation','source'].forEach(id => {
         document.getElementById('error-' + id).textContent = '';
       });
 
@@ -310,10 +313,10 @@
         valid = false;
       }
 
-      // Pass Type validation
-      const passType = document.getElementById('passType').value;
-      if (!passType) {
-        document.getElementById('error-passType').textContent = 'Please select a type of pass.';
+      // Source validation
+      const source = document.getElementById('source').value;
+      if (!source) {
+        document.getElementById('error-source').textContent = 'Please select how you heard about us.';
         valid = false;
       }
 
