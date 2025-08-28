@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors({
     origin: process.env.NODE_ENV === 'production' 
-        ? [process.env.ALLOWED_ORIGINS || 'https://your-app-name.railway.app'] 
+        ? [process.env.ALLOWED_ORIGINS || 'https://www.circleworkspace.com'] 
         : ['http://localhost:3000', 'https://localhost:3443'],
     credentials: true
 }));
