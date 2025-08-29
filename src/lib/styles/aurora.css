@@ -1,0 +1,332 @@
+@media (max-width: 768px) {
+    .aurora-image {
+        justify-self: center;
+    }
+
+    .aurora-image-placeholder {
+        width: clamp(180px, 50vw, 280px);
+        height: clamp(180px, 50vw, 280px);
+    }
+}
+
+@media (max-width: 480px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .aurora-content {
+        gap: clamp(1.5rem, 3vw, 2rem);
+    }
+
+    .aurora-image-placeholder {
+        width: clamp(150px, 70vw, 250px);
+        height: clamp(150px, 70vw, 250px);
+    }
+}
+
+/* Aurora Section Styles - Add to your style.css */
+
+/* Aurora Section */
+.aurora-section {
+    background: rgba(17, 17, 17, 0.96);
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 70vh;
+    display: flex;
+    margin: 0px !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.aurora-content {
+    text-align: left;
+    position: relative;
+    z-index: 15;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .aurora-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: clamp(2rem, 4vw, 3rem);
+    }
+}
+
+.aurora-text {
+    position: relative;
+    z-index: 20;
+}
+
+.aurora-image {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.aurora-image-placeholder {
+    width: clamp(200px, 35vw, 350px);
+    height: clamp(200px, 35vw, 350px);
+    border-radius: 16px;
+    object-fit: cover;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.aurora-image-placeholder:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.aurora-title {
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-weight: 700;
+    letter-spacing: clamp(-1.5px, -0.2vw, -3px);
+    position: relative;
+    margin: 0 0 1.5rem 0;
+    color: #ffffff;
+    line-height: 1.1;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Safari-specific fix for hero text visibility */
+@supports (-webkit-appearance: none) {
+
+    /* Fix opacity without breaking interactions */
+    .hero-title,
+    .hero-subtitle,
+    .hero-overlay,
+    .hero-overlay-inner {
+        opacity: 1 !important;
+        visibility: visible !important;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+
+    /* Fix slider buttons WITHOUT disabling transitions */
+    .slider-btn {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        /* Remove the transition: none that broke functionality */
+    }
+
+    .slider-btn.prev,
+    .slider-btn.next {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        z-index: 1001 !important;
+        position: absolute !important;
+    }
+
+    /* Prevent disappearing but keep slider working */
+    .slider-hero {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+
+    /* Fix for slides without breaking slider logic */
+    .slides,
+    .slide {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+}
+
+.aurora-subtitle {
+    font-size: clamp(1.36rem, 3.3vw, 2.1rem);
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Aurora Effect */
+.aurora {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.aurora__item {
+    overflow: hidden;
+    position: absolute;
+    width: 60vw;
+    height: 60vw;
+    border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+    filter: blur(1rem);
+    mix-blend-mode: overlay;
+}
+
+.aurora__item:nth-of-type(1) {
+    background-color: #50C878;
+    top: -50%;
+    animation: aurora-border 6s ease-in-out infinite,
+        aurora-1 12s ease-in-out infinite alternate;
+}
+
+.aurora__item:nth-of-type(2) {
+    background-color: #ffffff;
+    right: 0;
+    top: 0;
+    animation: aurora-border 6s ease-in-out infinite,
+        aurora-2 12s ease-in-out infinite alternate;
+}
+
+.aurora__item:nth-of-type(3) {
+    background-color: #3CB371;
+    left: 0;
+    bottom: 0;
+    animation: aurora-border 6s ease-in-out infinite,
+        aurora-3 8s ease-in-out infinite alternate;
+}
+
+.aurora__item:nth-of-type(4) {
+    background-color: #4a7c59;
+    right: 0;
+    bottom: -50%;
+    animation: aurora-border 6s ease-in-out infinite,
+        aurora-4 24s ease-in-out infinite alternate;
+}
+
+/* Aurora Animations */
+@keyframes aurora-1 {
+    0% {
+        top: 0;
+        right: 0;
+    }
+
+    50% {
+        top: 100%;
+        right: 75%;
+    }
+
+    75% {
+        top: 100%;
+        right: 25%;
+    }
+
+    100% {
+        top: 0;
+        right: 0;
+    }
+}
+
+@keyframes aurora-2 {
+    0% {
+        top: -50%;
+        left: 0%;
+    }
+
+    60% {
+        top: 100%;
+        left: 75%;
+    }
+
+    85% {
+        top: 100%;
+        left: 25%;
+    }
+
+    100% {
+        top: -50%;
+        left: 0%;
+    }
+}
+
+@keyframes aurora-3 {
+    0% {
+        bottom: 0;
+        left: 0;
+    }
+
+    40% {
+        bottom: 100%;
+        left: 75%;
+    }
+
+    65% {
+        bottom: 40%;
+        left: 50%;
+    }
+
+    100% {
+        bottom: 0;
+        left: 0;
+    }
+}
+
+@keyframes aurora-4 {
+    0% {
+        bottom: -50%;
+        right: 0;
+    }
+
+    50% {
+        bottom: 0%;
+        right: 40%;
+    }
+
+    90% {
+        bottom: 50%;
+        right: 25%;
+    }
+
+    100% {
+        bottom: -50%;
+        right: 0;
+    }
+}
+
+@keyframes aurora-border {
+    0% {
+        border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+    }
+
+    25% {
+        border-radius: 47% 29% 39% 49% / 61% 19% 66% 26%;
+    }
+
+    50% {
+        border-radius: 57% 23% 47% 72% / 63% 17% 66% 33%;
+    }
+
+    75% {
+        border-radius: 28% 49% 29% 100% / 93% 20% 64% 25%;
+    }
+
+    100% {
+        border-radius: 37% 29% 27% 27% / 28% 25% 41% 37%;
+    }
+}
+
+/* Responsive adjustments for aurora section */
+@media (max-width: 768px) {
+    .aurora-section {
+        min-height: 50vh;
+        padding: 5rem 1rem 3rem 1rem;
+    }
+
+    .aurora__item {
+        width: 80vw;
+        height: 80vw;
+    }
+}

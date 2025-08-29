@@ -1,0 +1,30 @@
+:root {
+    --bg: #f4f3f1;
+    --text-main: #111;
+    --divider: #1112;
+}
+
+html,
+body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+
+}
+
+body {
+    font-family: 'SF Pro Display',
+        'SF Pro Text',
+        'San Francisco',
+        'Helvetica Neue',
+        Arial,
+        sans-serif;
+    line-height: 1.5;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
