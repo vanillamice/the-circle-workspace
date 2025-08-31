@@ -34,9 +34,10 @@
     overflow: hidden;
     min-height: 70vh;
     display: flex;
-    margin: 0px !important;
+
     align-items: center;
     justify-content: center;
+
 }
 
 .aurora-content {
@@ -47,6 +48,7 @@
     grid-template-columns: 1fr 1fr;
     gap: clamp(2rem, 4vw, 4rem);
     align-items: center;
+    margin: 0 15%;
 }
 
 @media (max-width: 768px) {
@@ -60,6 +62,7 @@
 .aurora-text {
     position: relative;
     z-index: 20;
+
 }
 
 .aurora-image {
@@ -95,54 +98,6 @@
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-/* Safari-specific fix for hero text visibility */
-@supports (-webkit-appearance: none) {
-
-    /* Fix opacity without breaking interactions */
-    .hero-title,
-    .hero-subtitle,
-    .hero-overlay,
-    .hero-overlay-inner {
-        opacity: 1 !important;
-        visibility: visible !important;
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-    }
-
-    /* Fix slider buttons WITHOUT disabling transitions */
-    .slider-btn {
-        opacity: 1 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-        /* Remove the transition: none that broke functionality */
-    }
-
-    .slider-btn.prev,
-    .slider-btn.next {
-        opacity: 1 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
-        z-index: 1001 !important;
-        position: absolute !important;
-    }
-
-    /* Prevent disappearing but keep slider working */
-    .slider-hero {
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-    }
-
-    /* Fix for slides without breaking slider logic */
-    .slides,
-    .slide {
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
-}
 
 .aurora-subtitle {
     font-size: clamp(1.36rem, 3.3vw, 2.1rem);

@@ -1,7 +1,10 @@
 :root {
     --bg: #f4f3f1;
+    --bg-rgb: 244, 243, 241;
     --text-main: #111;
     --divider: #1112;
+    --accent: #00674f;
+    --accent-rgb: 0, 103, 79;
 }
 
 html,
