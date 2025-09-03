@@ -511,7 +511,7 @@ async function createReceptionBooking(name, email, phone, bookingData) {
     
     try {
         // Show success message
-        const details = `Your booking has been created successfully! Please pay ${bookingData.amount_cents / 100} L.E at reception when you arrive.\n\nBooking ID: ${result.booking.id}\nBooking: ${getBookingDescription(bookingData)}`;
+        const details = `Your booking has been created successfully! We will contact you for further details.\n\nBooking: ${getBookingDescription(bookingData)}`;
         showModal(details);
         
         // Reset button
@@ -648,7 +648,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Initialize payment method selection
-    const defaultPaymentMethod = 'paymob';
+    const defaultPaymentMethod = 'reception';
     selectPaymentMethod(defaultPaymentMethod);
     
     // Close modal when clicking outside
