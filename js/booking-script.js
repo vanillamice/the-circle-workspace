@@ -514,9 +514,12 @@ async function createReceptionBooking(name, email, phone, bookingData) {
         const details = `Your booking has been created successfully! We will contact you for further details.\n\nBooking: ${getBookingDescription(bookingData)}`;
         showModal(details);
         
+        // Track Google Ads conversion
+        gtag_report_conversion();
+        
         // Reset button
         const checkoutBtn = document.getElementById('checkout-btn');
-        checkoutBtn.textContent = 'Proceed to Payment';
+        checkoutBtn.textContent = 'Confirm Booking';
         checkoutBtn.disabled = false;
         
         // Close the user info modal
@@ -527,7 +530,7 @@ async function createReceptionBooking(name, email, phone, bookingData) {
         
         // Reset button
         const checkoutBtn = document.getElementById('checkout-btn');
-        checkoutBtn.textContent = 'Proceed to Payment';
+        checkoutBtn.textContent = 'Confirm Booking';
         checkoutBtn.disabled = false;
     }
 }

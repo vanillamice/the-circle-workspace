@@ -241,5 +241,23 @@
         </div>
     </div>
     <script src="../js/booking-script.js"></script>
+    
+    <!-- Event snippet for Book appointment conversion page -->
+    <script>
+    function gtag_report_conversion(url) {
+      var callback = function () {
+        if (typeof(url) != 'undefined') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion', {
+          'send_to': 'AW-10782745043/Gw10CNP0vJMbENPDzpUo',
+          'value': 1.0,
+          'currency': 'EGP',
+          'event_callback': callback
+      });
+      return false;
+    }
+    </script>
 </body>
 </html> 
