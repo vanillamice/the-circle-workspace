@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>the circle – career form</title>
+  <!-- Security headers -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <style>
+    :root {
+      --bg: #f4f3f1;
+      --card-bg: #fff;
+      --text-main: #111;
+      --text-accent: #111;
+      --border: #111;
+      --shadow: 0 4px 24px 0 rgba(0,0,0,0.07);
+      --divider: #1112;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: 'SF Pro', 'SF Pro Display', 'SF Pro Text', 'San Francisco', 'Helvetica Neue', Arial, sans-serif;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: var(--bg);
+      z-index: 100;
+      border-bottom: 3px solid #111;
+      padding: 1.125rem 0 0.75rem 0;
+      text-align: center;
+      font-size: 2.4rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: lowercase;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 0 2px 16px #7f5af033, 0 1px 2px #fff2;
+      position: relative;
+    }
+    .logo-circle {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 0.2em;
+    }
+    .logo-text {
+      position: relative;
+      font-family: 'SF Pro', 'SF Pro Display', 'SF Pro Text', 'San Francisco', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 2.7rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: lowercase;
+      color: var(--text-main);
+      z-index: 1;
+      padding: 0.2em 1.2em;
+    }
+    .form-section {
+      width: 100%;
+      max-width: 480px;
+      margin: 3.5rem auto 0 auto;
+      padding: 2.5rem 1.5rem 2.5rem 1.5rem;
+      background: var(--card-bg);
+      border: 3.25px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    .form-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 1.2rem;
+      text-align: center;
+      letter-spacing: 0.01em;
+      text-transform: lowercase;
+    }
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    label {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+      color: var(--text-main);
+      display: block;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 1.1rem;
+      background: #faf9f7;
+      color: var(--text-main);
+      box-sizing: border-box;
+      margin-bottom: 0.2rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="file"] {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+    input[type="file"]::-webkit-file-upload-button {
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      margin-right: 0.8rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    input[type="file"]::-webkit-file-upload-button:hover {
+      background: #037c00;
+    }
+    input:focus {
+      border-color: #037c00;
+    }
+    .form-error {
+      color: #c00;
+      font-size: 0.98rem;
+      margin-top: -0.7rem;
+      margin-bottom: 0.7rem;
+      min-height: 1.2em;
+    }
+    button[type="submit"] {
+      background: #111;
+      color: #fff;
+      font-size: 1.15rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      padding: 0.9rem 0;
+      margin-top: 0.7rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.07);
+      transition: background 0.2s;
+    }
+    button[type="submit"]:hover {
+      background: #037c00;
+    }
+    button[type="submit"]:disabled {
+      background: #666;
+      cursor: not-allowed;
+    }
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .json-result {
+      margin-top: 2.2rem;
+      background: #faf9f7;
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+      font-size: 1.08rem;
+      color: #222;
+      word-break: break-all;
+      white-space: pre-wrap;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (max-width: 700px) {
+      .form-section { padding-left: 0.5rem; padding-right: 0.5rem; max-width: 100vw; }
+      .form-title { font-size: 1.3rem; }
+      form { gap: 0.7rem; }
+      input, select { font-size: 1rem; padding: 0.6rem 0.7rem; }
+      button[type="submit"] { font-size: 1rem; padding: 0.7rem 0; }
+      .json-result { font-size: 0.98rem; padding: 0.7rem; }
+      header img {
+        width: 90px !important;
+        height: 90px !important;
+        max-width: 60vw !important;
+        max-height: 18vh !important;
+      }
+      header { font-size: 1.3rem; padding: 0.7rem 0 0.5rem 0; }
+    }
+  </style>
+</head>
+<body>
+  <header style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <img src="assets/logos/thecircletransparent.svg" alt="the circle logo" style="width:150px;height:150px;max-width:80vw;max-height:30vh;display:block;margin:0 auto;" />
+  </header>
+  <section class="form-section" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <div class="form-title">Join our community!</div>
+    <form action="https://formsubmit.co/contact@circleworkspace.com" method="POST" enctype="multipart/form-data" autocomplete="off" id="circleForm2">
+      <!-- FormSubmit Configuration -->
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="https://circleworkspace.com/thank-you.html">
+      <input type="hidden" name="_subject" value="Career Form Submission - The Circle">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_autoresponse" value="Thank you for your submission! We will contact you within 24 hours.">
+      
+      <div>
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" required placeholder="Your full name" maxlength="100" />
+        <div class="form-error" id="error-name"></div>
+      </div>
+      <div>
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" required pattern="^\+\d{1,4}\d{6,14}$" placeholder="+201234567890" maxlength="20" />
+        <div class="form-error" id="error-phone"></div>
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required placeholder="you@email.com" maxlength="254" />
+        <div class="form-error" id="error-email"></div>
+      </div>
+      <div>
+        <label for="job_title">Job Title</label>
+        <input type="text" id="job_title" name="job_title" required placeholder="Your current job title" maxlength="100" />
+        <div class="form-error" id="error-job_title"></div>
+      </div>
+      <div>
+        <label for="working_remotely">Are you currently working remotely?</label>
+        <select id="working_remotely" name="working_remotely" required>
+          <option value="" disabled selected>Select an option</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+        <div class="form-error" id="error-working_remotely"></div>
+      </div>
+      <div>
+        <label for="job_preference">Do you prefer contract or full time jobs?</label>
+        <select id="job_preference" name="job_preference" required>
+          <option value="" disabled selected>Select an option</option>
+          <option value="Contract">Contract</option>
+          <option value="Full Time">Full Time</option>
+          <option value="Both">Both</option>
+        </select>
+        <div class="form-error" id="error-job_preference"></div>
+      </div>
+      <div>
+        <label for="resume">Upload Resume (PDF only)</label>
+        <input type="file" id="resume" name="resume" accept=".pdf,application/pdf" required />
+        <div class="form-error" id="error-resume"></div>
+        <div style="font-size: 0.9rem; color: #666; margin-top: 0.3rem;">
+          Maximum file size: 5MB
+        </div>
+      </div>
+      <button type="submit" id="submitBtn">Submit</button>
+    </form>
+    <div class="json-result" id="jsonResult" style="display:none;"></div>
+  </section>
+  <footer style="width:100%;padding:2.2rem 0 1.2rem 0;text-align:center;color:var(--text-accent);font-size:1rem;border-top:1px solid var(--divider);background:none;margin-top:auto;">
+    &copy; 2025 the circle
+  </footer>
+  <script>
+    // Email regex: RFC 5322 compliant
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    const phoneRegex = /^\+\d{1,4}\d{6,14}$/;
+    
+    // Rate limiting
+    let submitAttempts = 0;
+    const maxAttempts = 3;
+    const lockoutTime = 5 * 60 * 1000; // 5 minutes
+    let lockoutUntil = 0;
+
+    document.getElementById('circleForm2').addEventListener('submit', function(e) {
+      // Check rate limiting
+      if (Date.now() < lockoutUntil) {
+        e.preventDefault();
+        const remainingTime = Math.ceil((lockoutUntil - Date.now()) / 1000 / 60);
+        alert(`Too many submission attempts. Please wait ${remainingTime} minutes before trying again.`);
+        return;
+      }
+
+      let valid = true;
+      const submitBtn = document.getElementById('submitBtn');
+      
+      // Disable submit button and show loading state
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+      document.getElementById('circleForm2').classList.add('loading');
+
+      // Clear errors
+      ['name','phone','email','job_title','working_remotely','job_preference','resume'].forEach(id => {
+        document.getElementById('error-' + id).textContent = '';
+      });
+
+      // Name validation
+      const name = document.getElementById('name').value.trim();
+      if (!name) {
+        document.getElementById('error-name').textContent = 'Full name is required.';
+        valid = false;
+      } else if (name.length < 2) {
+        document.getElementById('error-name').textContent = 'Name must be at least 2 characters.';
+        valid = false;
+      }
+
+      // Phone validation
+      const phone = document.getElementById('phone').value.trim();
+      if (!phone) {
+        document.getElementById('error-phone').textContent = 'Phone number is required.';
+        valid = false;
+      } else if (!phoneRegex.test(phone)) {
+        document.getElementById('error-phone').textContent = 'Please include country code (e.g. +201234567890).';
+        valid = false;
+      }
+
+      // Email validation
+      const email = document.getElementById('email').value.trim();
+      if (!email) {
+        document.getElementById('error-email').textContent = 'Email is required.';
+        valid = false;
+      } else if (!emailRegex.test(email)) {
+        document.getElementById('error-email').textContent = 'Please enter a valid email address.';
+        valid = false;
+      }
+
+      // Job title validation
+      const jobTitle = document.getElementById('job_title').value.trim();
+      if (!jobTitle) {
+        document.getElementById('error-job_title').textContent = 'Job title is required.';
+        valid = false;
+      } else if (jobTitle.length < 2) {
+        document.getElementById('error-job_title').textContent = 'Job title must be at least 2 characters.';
+        valid = false;
+      }
+
+      // Working remotely validation
+      const workingRemotely = document.getElementById('working_remotely').value;
+      if (!workingRemotely) {
+        document.getElementById('error-working_remotely').textContent = 'Please select whether you are currently working remotely.';
+        valid = false;
+      }
+
+      // Job preference validation
+      const jobPreference = document.getElementById('job_preference').value;
+      if (!jobPreference) {
+        document.getElementById('error-job_preference').textContent = 'Please select your job preference.';
+        valid = false;
+      }
+
+      // Resume validation
+      const resume = document.getElementById('resume').files[0];
+      if (!resume) {
+        document.getElementById('error-resume').textContent = 'Please upload your resume.';
+        valid = false;
+      } else {
+        // Check file type
+        if (resume.type !== 'application/pdf') {
+          document.getElementById('error-resume').textContent = 'Please upload a PDF file only.';
+          valid = false;
+        }
+        // Check file size (5MB = 5 * 1024 * 1024 bytes)
+        else if (resume.size > 5 * 1024 * 1024) {
+          document.getElementById('error-resume').textContent = 'File size must be less than 5MB.';
+          valid = false;
+        }
+      }
+
+      if (!valid) {
+        e.preventDefault();
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit';
+        document.getElementById('circleForm2').classList.remove('loading');
+        return;
+      }
+
+      // Increment submit attempts
+      submitAttempts++;
+      
+      // Check if we've exceeded max attempts
+      if (submitAttempts >= maxAttempts) {
+        lockoutUntil = Date.now() + lockoutTime;
+        alert('Too many submission attempts. Please wait 5 minutes before trying again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit';
+        document.getElementById('circleForm2').classList.remove('loading');
+        e.preventDefault();
+        return;
+      }
+
+      // Form is valid, let it submit
+      console.log('Form submitted successfully');
+    });
+
+    // Real-time validation
+    document.getElementById('name').addEventListener('input', function() {
+      const name = this.value.trim();
+      const errorEl = document.getElementById('error-name');
+      if (name && name.length < 2) {
+        errorEl.textContent = 'Name must be at least 2 characters.';
+      } else {
+        errorEl.textContent = '';
+      }
+    });
+
+    document.getElementById('phone').addEventListener('input', function() {
+      const phone = this.value.trim();
+      const errorEl = document.getElementById('error-phone');
+      if (phone && !phoneRegex.test(phone)) {
+        errorEl.textContent = 'Please include country code (e.g. +201234567890).';
+      } else {
+        errorEl.textContent = '';
+      }
+    });
+
+    document.getElementById('email').addEventListener('input', function() {
+      const email = this.value.trim();
+      const errorEl = document.getElementById('error-email');
+      if (email && !emailRegex.test(email)) {
+        errorEl.textContent = 'Please enter a valid email address.';
+      } else {
+        errorEl.textContent = '';
+      }
+    });
+
+    document.getElementById('job_title').addEventListener('input', function() {
+      const jobTitle = this.value.trim();
+      const errorEl = document.getElementById('error-job_title');
+      if (jobTitle && jobTitle.length < 2) {
+        errorEl.textContent = 'Job title must be at least 2 characters.';
+      } else {
+        errorEl.textContent = '';
+      }
+    });
+
+    document.getElementById('resume').addEventListener('change', function() {
+      const file = this.files[0];
+      const errorEl = document.getElementById('error-resume');
+      
+      if (file) {
+        // Check file type
+        if (file.type !== 'application/pdf') {
+          errorEl.textContent = 'Please upload a PDF file only.';
+        }
+        // Check file size (5MB = 5 * 1024 * 1024 bytes)
+        else if (file.size > 5 * 1024 * 1024) {
+          errorEl.textContent = 'File size must be less than 5MB.';
+        }
+        else {
+          errorEl.textContent = '';
+        }
+      } else {
+        errorEl.textContent = '';
+      }
+    });
+  </script>
+</body>
+</html>
