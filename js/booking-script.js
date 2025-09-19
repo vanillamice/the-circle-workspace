@@ -17,7 +17,7 @@ const planData = {
         maxDays: 7
     },
     monthly: {
-        price: 2300,
+        price: 1800,
         period: '/Month',
         features: [
             'High-speed wifi',
@@ -226,7 +226,7 @@ function handleSubmit(event) {
         
         bookingData = {
             booking_type: 'shared_monthly',
-            amount_cents: 230000, // 2,300 L.E in cents
+            amount_cents: 180000, // 1,800 L.E in cents
             start_date: date,
             end_date: endDateStr
         };

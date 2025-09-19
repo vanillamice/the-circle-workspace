@@ -80,7 +80,7 @@ CREATE TABLE bookings (
 - `phone` - Customer's phone number (optional)
 - `booking_type` - Type of booking:
   - `shared_daily` - Daily Pass (100 L.E)
-  - `shared_monthly` - Monthly Membership (2300 L.E)
+  - `shared_monthly` - Monthly Membership (1800 L.E)
   - `private_hourly` - Private Room (150 L.E/hour)
 - `date` - Booking date (YYYY-MM-DD format)
 - `time` - Booking time (HH:MM format, optional for daily/monthly)
@@ -594,7 +594,7 @@ Authorization: Bearer <jwt_token>
 ```javascript
 {
   booking_type: "shared_daily" | "shared_monthly" | "private_hourly",
-  price: 100 | 2300 | 150 // L.E per hour for private rooms
+  price: 100 | 1800 | 150 // L.E per hour for private rooms
 }
 ```
 
