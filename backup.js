@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
 const path = require('path');
 
-// Database backup utility
+// Database backup utility-hakuna matata
 class DatabaseBackup {
     constructor() {
         this.dbPath = path.join(__dirname, 'circle.db');
